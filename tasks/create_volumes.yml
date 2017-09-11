@@ -1,0 +1,40 @@
+---
+- name: create gitlab config directory
+  file: path={{config_volume}} state=directory owner=root group=root mode=775
+  when: not(
+            (config_volume is undefined)
+            or
+            (config_volume is none)
+            or
+            (config_volume | trim == '')
+          )
+
+- name: create gitlab data directory
+  file: path={{data_volume}} state=directory owner=root group=root mode=755
+  when: not(
+            (data_volume is undefined)
+            or
+            (data_volume is none)
+            or
+            (data_volume | trim == '')
+          )
+
+- name: create gitlab log directory
+  file: path={{log_volume}} state=directory owner={{gitlab_user_id}} group=root mode=755
+  when: not(
+            (log_volume is undefined)
+            or
+            (log_volume is none)
+            or
+            (log_volume | trim == '')
+          )
+
+- name: create gitlab backup directory
+  file: path={{backup_volume}} state=directory owner={{gitlab_user_id}} group=root mode=700
+  when: not(
+            (backup_volume is undefined)
+            or
+            (backup_volume is none)
+            or
+            (backup_volume | trim == '')
+          )
