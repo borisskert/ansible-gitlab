@@ -21,6 +21,9 @@
       backup_volume: /srv/docker/gitlab/backups
       external_url: http://vboxserver
       ssh_host: vboxserver:10022
+      https_port: 10443
+      http_port: 10080
+      ssh_port: 10022
       email:
         enabled: true
         from: 'XXXX@gmail.com'
