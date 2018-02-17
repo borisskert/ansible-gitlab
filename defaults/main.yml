@@ -2,6 +2,7 @@
 image_name: gitlab/gitlab-ce
 image_version: 9.5.4-ce.0
 
+interface: 0.0.0.0
 https_port: 443
 http_port: 80
 ssh_port: 10022

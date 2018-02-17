@@ -29,16 +29,17 @@ Role parameters
 |---------------|------|------------|---------|-----------------------|
 | image_name    | text | no         | gitlab/gitlab-ce | Docker image name    |
 | image_version | text | no         | 9.5.4-ce.0       | Docker image version |
-| https_port    | port | no         | 443              | Mapped HTTPS port    |
-| http_port     | port | no         | 80               | Mapped HTTP port     |
-| ssh_port      | port | no         | 10022            | Mapped SSH port      |
-| config_volume | path | no         | <empty>          | Path to config volume |
-| data_volume   | path | no         | <empty>          | Path to data volume   |
-| log_volume    | path | no         | <empty>          | Path to log volume    |
-| backup_volume | path | no         | <empty>          | Path to backup volume |
-| external_url  | url  | no         | <empty>          | Gitlab Url, like git.example.org |
-| ssh_host      | host | no         | <empty>          | SSH Host, lile ssh.example.org   |
-| email.enabled | boolean | no      | false            | Is mailing enabled?              |
+| interface     | ip address | no   | 0.0.0.0          | Mapped network for web-interface ports |
+| https_port    | port       | no   | 443              | Mapped HTTPS port        |
+| http_port     | port       | no   | 80               | Mapped HTTP port         |
+| ssh_port      | port       | no   | 10022            | Mapped SSH port          |
+| config_volume | path       | no   | <empty>          | Path to config volume    |
+| data_volume   | path       | no   | <empty>          | Path to data volume      |
+| log_volume    | path       | no   | <empty>          | Path to log volume       |
+| backup_volume | path       | no   | <empty>          | Path to backup volume    |
+| external_url  | url        | no   | <empty>          | Gitlab Url, like git.example.org |
+| ssh_host      | host       | no   | <empty>          | SSH Host, lile ssh.example.org   |
+| email.enabled | boolean    | no   | false            | Is mailing enabled?              |
 | email.from    | email address | no | <empty>         | Email from address               |
 | email.display_name | text     | no | <empty>         | Email from name                  |
 | email.reply_to     | email address | no | <empty>    | Reply email address              |
