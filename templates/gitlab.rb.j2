@@ -434,15 +434,15 @@ gitlab_rails['smtp_address'] = "{{smtp.address}}"
 gitlab_rails['smtp_port'] = {{smtp.port}}
 {% endif %}
 
-{% if smtp.user_name != "" %}
+{% if smtp.user_name is defined and smtp.user_name != "" %}
 gitlab_rails['smtp_user_name'] = "{{smtp.user_name}}"
 {% endif %}
 
-{% if smtp.password != "" %}
+{% if smtp.password is defined and smtp.password != "" %}
 gitlab_rails['smtp_password'] = "{{smtp.password}}"
 {% endif %}
 
-{% if smtp.domain != "" %}
+{% if smtp.domain is defined and smtp.domain != "" %}
 gitlab_rails['smtp_domain'] = "{{smtp.domain}}"
 {% endif %}
 
