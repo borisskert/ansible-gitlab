@@ -16,6 +16,7 @@ gitlab_user_id: 998
 
 external_url: ''
 ssh_host: ''
+shell_ssh_port: ''
 
 email:
   enabled: false

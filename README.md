@@ -38,11 +38,12 @@ Role parameters
 | log_volume    | path       | no   | <empty>          | Path to log volume       |
 | backup_volume | path       | no   | <empty>          | Path to backup volume    |
 | external_url  | url        | no   | <empty>          | Gitlab Url, like git.example.org |
-| ssh_host      | host       | no   | <empty>          | SSH Host, lile ssh.example.org   |
-| email.enabled | boolean    | no   | false            | Is mailing enabled?              |
-| email.from    | email address | no | <empty>         | Email from address               |
-| email.display_name | text     | no | <empty>         | Email from name                  |
-| email.reply_to     | email address | no | <empty>    | Reply email address              |
+| ssh_host      | host       | no   | <empty>          | SSH Host, like ssh.example.org   |
+| shell_ssh_port | host      | no   | <empty>          | Gitlab shell SSH port, like 10022 |
+| email.enabled  | boolean   | no   | false            | Is mailing enabled?               |
+| email.from     | email address | no | <empty>        | Email from address                |
+| email.display_name | text      | no | <empty>        | Email from name                   |
+| email.reply_to     | email address | no | <empty>    | Reply email address               |
 | email.subject_suffix | text        | no | <empty>    | Suffix in email subject, like [GitLab] |
 | smtp.address         | host        | no | <empty>    | SMTP server host                       |
 | smtp.port            | port        | no | <empty>    | SMTP server port                       |
