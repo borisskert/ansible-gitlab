@@ -2,6 +2,8 @@
 image_name: gitlab/gitlab-ce
 image_version: 9.5.4-ce.0
 
+container_name: gitlab.service
+
 interface: 0.0.0.0
 https_port: 443
 http_port: 80
@@ -33,3 +35,5 @@ smtp:
   domain: ''
   enable_starttls_auto: ''
   tls: ''
+
+backup_cron_job: /etc/cron.d/gitlab_backup

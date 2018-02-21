@@ -7,8 +7,8 @@ After       = docker.service
 Requires    = docker.service
 
 [Service]
-ExecStartPre = -/usr/bin/docker rm -f %n
-ExecStart = /usr/bin/docker run --name %n \
+ExecStartPre = -/usr/bin/docker rm -f {{container_name}}
+ExecStart = /usr/bin/docker run --name {{container_name}} \
 {% if config_volume != "" %}
             --volume {{config_volume}}:/etc/gitlab \
 {% endif %}
@@ -31,8 +31,8 @@ ExecStart = /usr/bin/docker run --name %n \
             --publish {{ssh_port}}:22 \
 {% endif %}
             {{image_name}}:{{image_version}}
-ExecStop  = -/usr/bin/docker stop %n
-ExecStopPost  = -/usr/bin/docker rm -f %n
+ExecStop  = -/usr/bin/docker stop {{container_name}}
+ExecStopPost  = -/usr/bin/docker rm -f {{container_name}}
 Restart = always
 RestartSec = 60s
 TimeoutSec=60
