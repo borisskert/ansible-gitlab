@@ -1,7 +1,8 @@
-install-docker-gitlab
-=====================
+ansible-gitlab
+==============
 
-Installs gitlab as docker container.
+Ansible role to install gitlab as docker service.
+This role is tested only on Ubuntu 16.04
 
 System requirements
 -------------------
