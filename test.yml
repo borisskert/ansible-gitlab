@@ -38,3 +38,4 @@
         domain: 'www.gmail.com'
         enable_starttls_auto: true
         tls: false
+      backup_keep_time: 604800

@@ -53,6 +53,7 @@ Role parameters
 | smtp.domain          | text        | no | <empty>    | SMTP domain                            |
 | smtp.enable_starttls_auto | boolean | no | <empty>   | Is start-tls-auto enabled?             |
 | smtp.tls                  | boolean | no | <empty>   | Use TLS?                               |
+| backup_keep_time          | number  | no | <empty>   | The duration in seconds to keep backups before they are allowed to be deleted |
 
 Example Playbook
 ----------------

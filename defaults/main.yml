@@ -37,3 +37,4 @@ smtp:
   tls: ''
 
 backup_cron_job: /etc/cron.d/gitlab_backup
+backup_keep_time: ''
