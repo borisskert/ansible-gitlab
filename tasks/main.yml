@@ -2,15 +2,27 @@
 - name: pull image
   docker_image:
     name: "{{image_name}}:{{image_version}}"
+    source: pull
+  register: gitlab_image
 
 - include: create_volumes.yml
 
 - name: Setup gitlab config
-  template: src=gitlab.rb.j2 dest={{config_volume}}/gitlab.rb owner=root group=root mode=0600
+  template:
+    src: gitlab.rb.j2
+    dest: "{{config_volume}}/gitlab.rb"
+    owner: root
+    group: root
+    mode: '0600'
   register: gitlab_config
 
 - name: Create gitlab systemd unit file
-  template: src=gitlab.systemd.j2 dest=/etc/systemd/system/gitlab.service owner=root group=root mode=0550
+  template:
+    src: gitlab.systemd.j2
+    dest: /etc/systemd/system/gitlab.service
+    owner: root
+    group: root
+    mode: '0550'
   register: gitlab_service
 
 - name: Create gitlab backup cron job
@@ -25,6 +37,14 @@
   command: systemctl daemon-reload
   when: gitlab_config.changed or gitlab_service.changed
 
-- name: Restart gitlab
-  service: name=gitlab state=restarted enabled=yes
-  when: gitlab_config.changed or gitlab_service.changed
+- name: Restart gitlab (on config or image change)
+  service:
+    name: gitlab
+    state: restarted
+    enabled: yes
+  when: gitlab_config.changed or gitlab_service.changed or gitlab_image.changed
+
+- name: Start gitlab (if not started already)
+  service:
+    name: gitlab
+    state: started

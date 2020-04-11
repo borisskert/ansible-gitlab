@@ -1,0 +1,43 @@
+---
+- hosts: test_machine
+  become: yes
+
+  vars:
+    docker_volumes: /srv/docker
+    gitlab:
+      host: git.myserver.org
+      url: https://git.myserver.org
+      www_port: 10080
+      ssh_port: 10022
+
+  roles:
+    - role: ansible-docker
+      storage_driver: overlay2
+      cleanup_enabled: no
+      install_pip_docker: yes
+
+    - role: ansible-gitlab
+      image_version: 12.9.2-ce.0
+      config_volume: "{{docker_volumes}}/gitlab/config"
+      data_volume: "{{docker_volumes}}/gitlab/data"
+      log_volume: "{{docker_volumes}}/gitlab/log"
+      backup_volume: "{{docker_volumes}}/gitlab/backups"
+      external_url: "{{gitlab.url}}"
+      ssh_host: "{{gitlab.host}}"
+      https_port: 10443
+      http_port: "{{gitlab.www_port}}"
+      ssh_port: "{{gitlab.ssh_port}}"
+      shell_ssh_port: "{{gitlab.ssh_port}}"
+      email:
+        enabled: true
+        from: 'gitlab@git.myserver.org'
+        display_name: 'gitlab@git.myserver.org'
+        reply_to: 'gitlab@git.myserver.org'
+        subject_suffix: '[Gitlab]'
+      smtp:
+        address: '127.0.0.1'
+        port: 25
+        domain: 'git.myserver.org'
+        enable_starttls_auto: false
+        tls: false
+      backup_keep_time: 604800

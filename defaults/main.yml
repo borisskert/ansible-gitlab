@@ -1,6 +1,6 @@
 ---
 image_name: gitlab/gitlab-ce
-image_version: 9.5.4-ce.0
+image_version: 12.9.2-ce.0
 
 container_name: gitlab.service
 
@@ -14,7 +14,7 @@ data_volume: ''
 log_volume: ''
 backup_volume: ''
 
-gitlab_user_id: 998
+gitlab_user_id: '998'
 
 external_url: ''
 ssh_host: ''
