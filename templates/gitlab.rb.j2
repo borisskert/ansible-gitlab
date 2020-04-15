@@ -878,7 +878,12 @@ gitlab_rails['smtp_tls'] = false
 
 ##! **Defaults to forcing web browsers to always communicate using only HTTPS**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-http-strict-transport-security
+{% if disable_hsts | bool %}
+# HSTS disabled by ansible install-gitlab role
+nginx['hsts_max_age'] = 0
+{% else %}
 # nginx['hsts_max_age'] = 31536000
+{% endif %}
 # nginx['hsts_include_subdomains'] = false
 
 ##! **Override only if you use a reverse proxy**

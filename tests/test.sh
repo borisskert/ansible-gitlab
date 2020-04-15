@@ -11,7 +11,6 @@ while ! timeout 1 nc -z 192.168.33.71 22; do
 done
 
 ansible-playbook -i inventory.ini test.yml
-ansible-playbook -i inventory.ini test.yml
 
 ansible-playbook -i inventory.ini test.yml \
   | grep -q 'changed=0.*failed=0' \

@@ -29,7 +29,7 @@ Role parameters
 | Variable      | Type | Mandatory? | Default | Description           |
 |---------------|------|------------|---------|-----------------------|
 | image_name    | text | no         | gitlab/gitlab-ce | Docker image name    |
-| image_version | text | no         | 9.5.4-ce.0       | Docker image version |
+| image_version | text | no         | 12.9.2-ce.0      | Docker image version |
 | interface     | ip address | no   | 0.0.0.0          | Mapped network for web-interface ports |
 | https_port    | port       | no   | 443              | Mapped HTTPS port        |
 | http_port     | port       | no   | 80               | Mapped HTTP port         |
@@ -54,6 +54,7 @@ Role parameters
 | smtp.enable_starttls_auto | boolean | no | <empty>   | Is start-tls-auto enabled?             |
 | smtp.tls                  | boolean | no | <empty>   | Use TLS?                               |
 | backup_keep_time          | number  | no | <empty>   | The duration in seconds to keep backups before they are allowed to be deleted |
+| disable_hsts              | boolean | no | no        | If you are running your GitLab instance behind a reverse proxy you probably don't want to configure HSTS in GitLab |
 
 Example Playbook
 ----------------
