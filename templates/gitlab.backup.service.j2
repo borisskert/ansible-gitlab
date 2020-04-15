@@ -1,0 +1,9 @@
+[Unit]
+Description=gitlab backup service
+Requires={{container_name}}
+
+[Service]
+ExecStart = /usr/bin/docker exec --tty {{container_name}} \
+                gitlab-rake gitlab:backup:create
+Restart = no
+TimeoutSec = 3600

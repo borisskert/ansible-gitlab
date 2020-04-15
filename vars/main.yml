@@ -1,0 +1,4 @@
+---
+container_name: gitlab.service
+gitlab_user_id: '998'
+gitlab_backup_service_name: gitlab-backup

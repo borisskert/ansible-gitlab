@@ -2,8 +2,6 @@
 image_name: gitlab/gitlab-ce
 image_version: 12.9.2-ce.0
 
-container_name: gitlab.service
-
 interface: 0.0.0.0
 https_port: 443
 http_port: 80
@@ -13,8 +11,6 @@ config_volume: ''
 data_volume: ''
 log_volume: ''
 backup_volume: ''
-
-gitlab_user_id: '998'
 
 external_url: ''
 ssh_host: ''
@@ -36,5 +32,4 @@ smtp:
   enable_starttls_auto: ''
   tls: ''
 
-backup_cron_job: /etc/cron.d/gitlab_backup
 backup_keep_time: ''

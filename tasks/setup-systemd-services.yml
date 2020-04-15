@@ -1,0 +1,50 @@
+---
+- name: Create gitlab systemd unit file
+  template:
+    src: gitlab.systemd.j2
+    dest: /etc/systemd/system/gitlab.service
+    owner: root
+    group: root
+    mode: '0644'
+  register: gitlab_service
+
+- name: Setup gitlab service
+  service:
+    name: gitlab
+    enabled: yes
+
+- name: Create gitlab backup service
+  template:
+    src: gitlab.backup.service.j2
+    dest: "/etc/systemd/system/{{gitlab_backup_service_name}}.service"
+    owner: root
+    group: root
+    mode: '0554'
+  register: gitlab_backup_service
+
+- name: Create gitlab backup timer
+  template:
+    src: gitlab.backup.timer.j2
+    dest: "/etc/systemd/system/{{gitlab_backup_service_name}}.timer"
+    owner: root
+    group: root
+    mode: '0554'
+  register: gitlab_backup_timer
+
+- name: Setup gitlab backup service
+  service:
+    name: "{{gitlab_backup_service_name}}.service"
+    enabled: yes
+
+- name: Setup gitlab backup timer
+  systemd:
+    name: "{{gitlab_backup_service_name}}.timer"
+    state: started
+    enabled: yes
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: >
+    gitlab_service.changed
+    or gitlab_backup_service.changed
+    or gitlab_backup_timer.changed

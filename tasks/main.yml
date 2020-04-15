@@ -16,33 +16,17 @@
     mode: '0600'
   register: gitlab_config
 
-- name: Create gitlab systemd unit file
-  template:
-    src: gitlab.systemd.j2
-    dest: /etc/systemd/system/gitlab.service
-    owner: root
-    group: root
-    mode: '0550'
-  register: gitlab_service
-
-- name: Create gitlab backup cron job
-  template:
-    src: gitlab.backup.cron.j2
-    dest: "{{backup_cron_job}}"
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Reload systemd
-  command: systemctl daemon-reload
-  when: gitlab_config.changed or gitlab_service.changed
+- include: setup-systemd-services.yml
 
 - name: Restart gitlab (on config or image change)
   service:
     name: gitlab
     state: restarted
     enabled: yes
-  when: gitlab_config.changed or gitlab_service.changed or gitlab_image.changed
+  when: >
+    gitlab_config.changed
+    or gitlab_service.changed
+    or gitlab_image.changed
 
 - name: Start gitlab (if not started already)
   service:
