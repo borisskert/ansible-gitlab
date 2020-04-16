@@ -1,30 +1,25 @@
-ansible-gitlab
-==============
+# ansible-gitlab
 
 Ansible role to install gitlab as docker service.
 This role is tested only on Ubuntu 16.04
 
-System requirements
--------------------
+## System requirements
 
 * Docker
 * Systemd
 
-Role requirements
------------------
+## Role requirements
 
 * python-docker package
 
-Tasks
------
+## Tasks
 
 * Create volume paths for docker container
 * Setup gitlab config
 * Setup systemd unit file
 * Start/Restart gitlab service
 
-Role parameters
---------------
+## Role parameters
 
 | Variable      | Type | Mandatory? | Default | Description           |
 |---------------|------|------------|---------|-----------------------|
@@ -56,26 +51,36 @@ Role parameters
 | backup_keep_time          | number  | no | <empty>   | The duration in seconds to keep backups before they are allowed to be deleted |
 | disable_hsts              | boolean | no | no        | If you are running your GitLab instance behind a reverse proxy you probably don't want to configure HSTS in GitLab |
 
-Example Playbook
-----------------
+## Usage
 
-Usage (without parameters):
+### requirements.yml
 
+```yaml
+- name: install-gitlab
+  src: https://github.com/borisskert/ansible-gitlab.git
+  scm: git
+```
+
+### Playbook
+
+minimal:
+
+```yaml
     - hosts: servers
       roles:
-         - { role: install-docker-gitlab }
+      - role: install-gitlab
+```
 
-Usage (with parameters):
-
+```yaml
     - hosts: servers
       roles:
-      - role: install-docker-gitlab
+      - role: install-gitlab
         config_volume: /srv/docker/gitlab/config
         data_volume: /srv/docker/gitlab/data
         log_volume: /srv/docker/gitlab/log
         backup_volume: /srv/docker/gitlab/backups
-        external_url: http://vboxserver
-        ssh_host: vboxserver:10022
+        external_url: http://your.gitlab.org
+        ssh_host: your.gitlab.org
         email:
           enabled: true
           from: 'your_mail@gmail.com'
@@ -90,3 +95,4 @@ Usage (with parameters):
           domain: 'www.gmail.com'
           enable_starttls_auto: true
           tls: false
+```
