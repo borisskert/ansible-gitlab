@@ -66,33 +66,48 @@ This role is tested only on Ubuntu 16.04
 minimal:
 
 ```yaml
-    - hosts: servers
-      roles:
-      - role: install-gitlab
+- hosts: test_machine
+  become: yes
+
+  roles:
+  - role: install-gitlab
 ```
 
 ```yaml
-    - hosts: servers
-      roles:
-      - role: install-gitlab
-        config_volume: /srv/docker/gitlab/config
-        data_volume: /srv/docker/gitlab/data
-        log_volume: /srv/docker/gitlab/log
-        backup_volume: /srv/docker/gitlab/backups
-        external_url: http://your.gitlab.org
-        ssh_host: your.gitlab.org
-        email:
-          enabled: true
-          from: 'your_mail@gmail.com'
-          display_name: 'Gitlab vboxserver'
-          reply_to: 'your_mail@gmail.com'
-          subject_suffix: '[Gitlab]'
-        smtp:
-          address: 'smtp.gmail.com'
-          port: 587
-          user_name: 'your_mail@gmail.com'
-          password: 'your_password'
-          domain: 'www.gmail.com'
-          enable_starttls_auto: true
-          tls: false
+- hosts: test_machine
+  become: yes
+
+  roles:
+    - role: install-docker
+      storage_driver: overlay2
+      cleanup_enabled: no
+      install_pip_docker: yes
+
+    - role: install-gitlab
+      image_version: 12.9.2-ce.0
+      config_volume: /srv/docker/gitlab/config
+      data_volume: /srv/docker/gitlab/data
+      log_volume: /srv/docker/gitlab/log
+      backup_volume: /srv/docker/gitlab/backups
+      external_url: http://your.gitlab.org
+      ssh_host: your.gitlab.org
+      https_port: 10443
+      http_port: 10080
+      ssh_port: 10022
+      shell_ssh_port: 10022
+      disable_hsts: yes
+      email:
+        enabled: true
+        from: 'gitlab@git.myserver.org'
+        display_name: 'gitlab@git.myserver.org'
+        reply_to: 'gitlab@git.myserver.org'
+        subject_suffix: '[Gitlab]'
+      smtp:
+        address: 'smtp.gmail.com'
+        port: 587
+        user_name: 'your_mail@gmail.com'
+        password: 'your_password'
+        domain: 'www.gmail.com'
+        enable_starttls_auto: true
+      backup_keep_time: 604800
 ```
