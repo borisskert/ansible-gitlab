@@ -37,3 +37,7 @@ backup_keep_time: ''
 # if you are running your GitLab instance behind a reverse proxy
 # you probably don't want to configure HSTS in GitLab but in your reverse proxy
 disable_hsts: no
+
+container_name: gitlab.service
+gitlab_user_id: '998'
+gitlab_backup_service_name: gitlab-backup
