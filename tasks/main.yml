@@ -1,11 +1,13 @@
 ---
+- include: check-parameters.yml
+
 - name: pull image
   docker_image:
     name: "{{image_name}}:{{image_version}}"
     source: pull
   register: gitlab_image
 
-- include: create_volumes.yml
+- include: create-volumes.yml
 
 - name: Setup gitlab config
   template:

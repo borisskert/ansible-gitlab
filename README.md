@@ -29,10 +29,10 @@ This role is tested only on Ubuntu 16.04
 | https_port    | port       | no   | 443              | Mapped HTTPS port        |
 | http_port     | port       | no   | 80               | Mapped HTTP port         |
 | ssh_port      | port       | no   | 10022            | Mapped SSH port          |
-| config_volume | path       | no   | <empty>          | Path to config volume    |
-| data_volume   | path       | no   | <empty>          | Path to data volume      |
-| log_volume    | path       | no   | <empty>          | Path to log volume       |
-| backup_volume | path       | no   | <empty>          | Path to backup volume    |
+| config_volume | path       | yes  | <empty>          | Path to config volume    |
+| data_volume   | path       | yes  | <empty>          | Path to data volume      |
+| log_volume    | path       | yes  | <empty>          | Path to log volume       |
+| backup_volume | path       | yes  | <empty>          | Path to backup volume    |
 | external_url  | url        | no   | <empty>          | Gitlab Url, like git.example.org |
 | ssh_host      | host       | no   | <empty>          | SSH Host, like ssh.example.org   |
 | shell_ssh_port | host      | no   | <empty>          | Gitlab shell SSH port, like 10022 |
@@ -71,6 +71,10 @@ minimal:
 
   roles:
   - role: install-gitlab
+    config_volume: /srv/gitlab/config
+    data_volume: /srv/gitlab/data
+    log_volume: /srv/gitlab/log
+    backup_volume: /srv/gitlab/backups
 ```
 
 ```yaml
@@ -85,10 +89,10 @@ minimal:
 
     - role: install-gitlab
       image_version: 12.9.2-ce.0
-      config_volume: /srv/docker/gitlab/config
-      data_volume: /srv/docker/gitlab/data
-      log_volume: /srv/docker/gitlab/log
-      backup_volume: /srv/docker/gitlab/backups
+      config_volume: /srv/gitlab/config
+      data_volume: /srv/gitlab/data
+      log_volume: /srv/gitlab/log
+      backup_volume: /srv/gitlab/backups
       external_url: http://your.gitlab.org
       ssh_host: your.gitlab.org
       https_port: 10443

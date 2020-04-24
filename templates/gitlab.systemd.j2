@@ -9,18 +9,10 @@ Requires    = docker.service
 [Service]
 ExecStartPre = -/usr/bin/docker rm -f {{container_name}}
 ExecStart = /usr/bin/docker run --name {{container_name}} \
-{% if config_volume != "" %}
             --volume {{config_volume}}:/etc/gitlab \
-{% endif %}
-{% if data_volume != "" %}
             --volume {{data_volume}}:/var/opt/gitlab \
-{% endif %}
-{% if log_volume != "" %}
             --volume {{log_volume}}:/var/log/gitlab \
-{% endif %}
-{% if backup_volume != "" %}
             --volume {{backup_volume}}:/var/opt/gitlab/backups \
-{% endif %}
 {% if https_port != "" %}
             --publish {{interface}}:{{https_port}}:443 \
 {% endif %}

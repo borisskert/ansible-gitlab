@@ -10,10 +10,10 @@
 
     - role: ansible-gitlab
       image_version: 12.9.2-ce.0
-      config_volume: /srv/docker/gitlab/config
-      data_volume: /srv/docker/gitlab/data
-      log_volume: /srv/docker/gitlab/log
-      backup_volume: /srv/docker/gitlab/backups
+      config_volume: /srv/gitlab/config
+      data_volume: /srv/gitlab/data
+      log_volume: /srv/gitlab/log
+      backup_volume: /srv/gitlab/backups
       external_url: http://192.168.33.71
       ssh_host: 192.168.33.71
       https_port: 10443

@@ -1,0 +1,32 @@
+---
+- name: Create gitlab config directory
+  file:
+    path: "{{config_volume}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+
+- name: Create gitlab data directory
+  file:
+    path: "{{data_volume}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create gitlab log directory
+  file:
+    path: "{{log_volume}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create gitlab backup directory
+  file:
+    path: "{{backup_volume}}"
+    state: directory
+    owner: "{{gitlab_user_id}}"
+    group: root
+    mode: 0700
