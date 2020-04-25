@@ -1,14 +1,15 @@
 [Install]
-WantedBy = multi-user.target
+WantedBy=multi-user.target
 
 [Unit]
-Description = gitlab service
-After       = docker.service
-Requires    = docker.service
+Description=gitlab service
+After=docker.service
+Requires=docker.service
 
 [Service]
-ExecStartPre = -/usr/bin/docker rm -f {{container_name}}
-ExecStart = /usr/bin/docker run --name {{container_name}} \
+ExecStartPre=-/usr/bin/docker rm -f {{container_name}}
+
+ExecStart=/usr/bin/docker run --name {{container_name}} \
             --volume {{config_volume}}:/etc/gitlab \
             --volume {{data_volume}}:/var/opt/gitlab \
             --volume {{log_volume}}:/var/log/gitlab \
@@ -23,8 +24,10 @@ ExecStart = /usr/bin/docker run --name {{container_name}} \
             --publish {{ssh_port}}:22 \
 {% endif %}
             {{image_name}}:{{image_version}}
-ExecStop  = -/usr/bin/docker stop {{container_name}}
-ExecStopPost  = -/usr/bin/docker rm -f {{container_name}}
-Restart = always
-RestartSec = 60s
-TimeoutSec=60
+
+ExecStop=-/usr/bin/docker stop {{container_name}}
+ExecStopPost=-/usr/bin/docker rm -f {{container_name}}
+
+Restart=always
+RestartSec=60s
+TimeoutSec=3600

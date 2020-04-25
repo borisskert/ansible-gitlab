@@ -34,3 +34,4 @@
   service:
     name: gitlab
     state: started
+    enabled: yes
