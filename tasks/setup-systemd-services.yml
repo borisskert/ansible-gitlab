@@ -5,13 +5,8 @@
     dest: /etc/systemd/system/gitlab.service
     owner: root
     group: root
-    mode: '0644'
+    mode: 0644
   register: gitlab_service
-
-- name: Setup gitlab service
-  service:
-    name: gitlab
-    enabled: yes
 
 - name: Create gitlab backup service
   template:
@@ -19,7 +14,7 @@
     dest: "/etc/systemd/system/{{gitlab_backup_service_name}}.service"
     owner: root
     group: root
-    mode: '0554'
+    mode: 0644
   register: gitlab_backup_service
 
 - name: Create gitlab backup timer
@@ -28,8 +23,20 @@
     dest: "/etc/systemd/system/{{gitlab_backup_service_name}}.timer"
     owner: root
     group: root
-    mode: '0554'
+    mode: 0644
   register: gitlab_backup_timer
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: >
+    gitlab_service.changed
+    or gitlab_backup_service.changed
+    or gitlab_backup_timer.changed
+
+- name: Setup gitlab service
+  service:
+    name: gitlab
+    enabled: yes
 
 - name: Setup gitlab backup service
   service:
@@ -41,10 +48,3 @@
     name: "{{gitlab_backup_service_name}}.timer"
     state: started
     enabled: yes
-
-- name: Reload systemd
-  command: systemctl daemon-reload
-  when: >
-    gitlab_service.changed
-    or gitlab_backup_service.changed
-    or gitlab_backup_timer.changed
