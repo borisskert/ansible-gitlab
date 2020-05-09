@@ -1,0 +1,19 @@
+---
+- name: Reload systemd
+  systemd:
+    daemon_reload: true
+
+- name: Start gitlab service
+  service:
+    name: gitlab
+    state: started
+  register: gitlab_service_start
+
+- name: Restart gitlab
+  service:
+    name: gitlab
+    state: restarted
+  when: not (
+    gitlab_service_start is defined
+    and gitlab_service_start.changed
+    )

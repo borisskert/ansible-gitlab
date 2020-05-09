@@ -3,35 +3,30 @@
 
 - name: pull image
   docker_image:
-    name: "{{image_name}}:{{image_version}}"
+    name: "{{ image_name }}:{{ image_version }}"
     source: pull
-  register: gitlab_image
+  notify: Restart gitlab
 
 - include: create-volumes.yml
 
 - name: Setup gitlab config
   template:
     src: gitlab.rb.j2
-    dest: "{{config_volume}}/gitlab.rb"
+    dest: "{{ config_volume }}/gitlab.rb"
     owner: root
     group: root
     mode: '0600'
-  register: gitlab_config
+  notify: Restart gitlab
 
 - include: setup-systemd-services.yml
 
-- name: Restart gitlab (on config or image change)
+- name: Enable service
   service:
     name: gitlab
-    state: restarted
-    enabled: yes
-  when: >
-    gitlab_config.changed
-    or gitlab_service.changed
-    or gitlab_image.changed
+    enabled: true
+  register: service_state
+  changed_when: service_state.status.SubState != 'running'
+  notify: Start gitlab service
 
-- name: Start gitlab (if not started already)
-  service:
-    name: gitlab
-    state: started
-    enabled: yes
+- name: Flush handlers
+  meta: flush_handlers
