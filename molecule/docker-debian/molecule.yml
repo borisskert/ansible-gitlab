@@ -1,0 +1,33 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: ./molecule/shared/common/requirements.yml
+
+lint: |
+  set -e
+  yamllint . --strict
+  ansible-lint
+
+driver:
+  name: docker
+
+platforms:
+  - name: ansible-gitlab-debian
+    image: docker.io/pycontribs/debian
+    pre_build_image: true
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+provisioner:
+  name: ansible
+  playbooks:
+    prepare: ../shared/docker/prepare.yml
+    converge: ../shared/docker/converge.yml
+  inventory:
+    host_vars:
+      ansible-gitlab-debian:
+        ansible_python_interpreter: /usr/bin/python3
+
+verifier:
+  name: ansible

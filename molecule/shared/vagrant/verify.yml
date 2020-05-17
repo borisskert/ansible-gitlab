@@ -1,0 +1,16 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Should GET root site
+      get_url:
+        url: http://localhost:10080/
+        dest: /tmp/root.html
+      register: get_request
+      retries: 300
+      delay: 1
+      until: get_request is defined
+        and get_request.status_code is defined
+        and get_request.status_code == 200

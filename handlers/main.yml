@@ -2,6 +2,10 @@
 - name: Reload systemd
   systemd:
     daemon_reload: true
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )
 
 - name: Start gitlab service
   service:
@@ -16,4 +20,8 @@
   when: not (
     gitlab_service_start is defined
     and gitlab_service_start.changed
+    )
+    and not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
     )

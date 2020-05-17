@@ -1,0 +1,26 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: ./molecule/shared/common/requirements.yml
+
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+
+platforms:
+  - name: ansible-gitlab-bionic
+    box: ubuntu/bionic64
+    memory: 4096
+    cpus: 2
+
+provisioner:
+  name: ansible
+  playbooks:
+    prepare: ../shared/vagrant/prepare.yml
+    converge: ../shared/vagrant/converge.yml
+    verify: ../shared/vagrant/verify.yml
+
+verifier:
+  name: ansible

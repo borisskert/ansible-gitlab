@@ -20,13 +20,5 @@
 
 - include: setup-systemd-services.yml
 
-- name: Enable service
-  service:
-    name: gitlab
-    enabled: true
-  register: service_state
-  changed_when: service_state.status.SubState != 'running'
-  notify: Start gitlab service
-
 - name: Flush handlers
   meta: flush_handlers

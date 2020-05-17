@@ -115,3 +115,32 @@ minimal:
         enable_starttls_auto: true
       backup_keep_time: 604800
 ```
+
+## Testing
+
+Requirements:
+
+* [Vagrant](https://www.vagrantup.com/)
+* [VirtualBox](https://www.virtualbox.org/)
+* [Ansible](https://docs.ansible.com/)
+* [Molecule](https://molecule.readthedocs.io/en/latest/index.html)
+* [yamllint](https://yamllint.readthedocs.io/en/stable/#)
+* [ansible-lint](https://docs.ansible.com/ansible-lint/)
+* [Docker](https://docs.docker.com/)
+
+### Run within docker
+
+```shell script
+molecule test --scenario-name docker-ubuntu
+molecule test --scenario-name docker-debian
+```
+
+### Run within Vagrant
+
+```shell script
+molecule test --scenario-name vagrant-xenial
+molecule test --scenario-name vagrant-bionic
+molecule test --scenario-name vagrant-focal
+molecule test --scenario-name vagrant-stretch
+molecule test --scenario-name vagrant-buster
+```
