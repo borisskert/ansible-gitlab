@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
   options:
-    role-file: ./molecule/shared/common/requirements.yml
+    role-file: ./molecule/shared/requirements.yml
 
 driver:
   name: vagrant
@@ -18,8 +18,8 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
-    prepare: ../shared/vagrant/prepare.yml
-    converge: ../shared/vagrant/converge.yml
+    prepare: ../shared/prepare.yml
+    converge: ../shared/converge.yml
     verify: ../shared/vagrant/verify.yml
   inventory:
     host_vars:

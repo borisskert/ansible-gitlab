@@ -131,8 +131,7 @@ Requirements:
 ### Run within docker
 
 ```shell script
-molecule test --scenario-name docker-ubuntu
-molecule test --scenario-name docker-debian
+molecule test
 ```
 
 ### Run within Vagrant
@@ -144,3 +143,6 @@ molecule test --scenario-name vagrant-focal
 molecule test --scenario-name vagrant-stretch
 molecule test --scenario-name vagrant-buster
 ```
+
+I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.
+Within the Github Actions pipeline I use [my own molecule Docker image](https://github.com/borisskert/docker-molecule).
