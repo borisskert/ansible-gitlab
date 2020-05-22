@@ -15,7 +15,7 @@
     dest: "{{ config_volume }}/gitlab.rb"
     owner: root
     group: root
-    mode: '0600'
+    mode: 0600
   notify: Restart gitlab
 
 - include: setup-systemd-services.yml
