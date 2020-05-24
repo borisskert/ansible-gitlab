@@ -26,3 +26,38 @@
       - "backup_volume is defined"
       - "backup_volume | length > 0"
     fail_msg: "parameter 'backup_volume' is missing"
+
+- name: Check 'pages_enabled' parameter
+  assert:
+    that:
+      - "pages_enabled is defined"
+    fail_msg: "parameter 'pages_enabled' is missing"
+
+- name: Check 'pages_port' parameter
+  assert:
+    that:
+      - "pages_port is defined"
+      - "pages_port > 0"
+      - "pages_port < 65536"
+    fail_msg: "parameter 'pages_port' is missing"
+  when: pages_enabled is defined
+    and pages_enabled | bool
+
+- name: Check 'pages_external_port' parameter
+  assert:
+    that:
+      - "pages_external_port is defined"
+      - "pages_external_port > 0"
+      - "pages_external_port < 65536"
+    fail_msg: "parameter 'pages_external_port' is missing"
+  when: pages_enabled is defined
+    and pages_enabled | bool
+
+- name: Check 'pages_external_url' parameter
+  assert:
+    that:
+      - "pages_external_url is defined"
+      - "pages_external_url | length > 0"
+    fail_msg: "parameter 'pages_external_url' is missing"
+  when: pages_enabled is defined
+    and pages_enabled | bool

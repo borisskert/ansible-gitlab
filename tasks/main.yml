@@ -1,12 +1,5 @@
 ---
 - include: check-parameters.yml
-
-- name: pull image
-  docker_image:
-    name: "{{ image_name }}:{{ image_version }}"
-    source: pull
-  notify: Restart gitlab
-
 - include: create-volumes.yml
 
 - name: Setup gitlab config
@@ -20,5 +13,11 @@
 
 - include: setup-systemd-services.yml
 
-- name: Flush handlers
+- name: pull image (to avoid long down-times)
+  docker_image:
+    name: "{{ image_name }}:{{ image_version }}"
+    source: pull
+  notify: Restart gitlab
+
+- name: Reload systemd and restart Gitlab if neccessary
   meta: flush_handlers

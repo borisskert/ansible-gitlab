@@ -5,18 +5,24 @@
 
   roles:
     - role: ansible-gitlab
-      image_version: 12.9.2-ce.0
+      image_version: 13.0.0-ce.0
+      # image_version: 12.9.2-ce.0
+      # image_version: 12.10.6-ce.0
+      # image_version: 13.0.0-ce.0
       config_volume: /srv/gitlab/config
       data_volume: /srv/gitlab/data
       log_volume: /srv/gitlab/log
       backup_volume: /srv/gitlab/backups
-      external_url: http://localhost:10080
+      external_url: http://192.168.33.71:10080
       ssh_host: localhost
       https_port: 10443
       http_port: 10080
       ssh_port: 10022
       shell_ssh_port: 10022
       disable_hsts: true
+      pages_enabled: true
+      pages_external_port: 10081
+      pages_external_url: http://192.168.33.71:10081
       email:
         enabled: true
         from: 'gitlab@git.myserver.org'

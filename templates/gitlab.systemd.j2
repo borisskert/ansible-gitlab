@@ -20,6 +20,9 @@ ExecStart=/usr/bin/docker run --name {{container_name}} \
 {% if http_port != "" %}
             --publish {{interface}}:{{http_port}}:80 \
 {% endif %}
+{% if pages_enabled | bool %}
+            --publish {{interface}}:{{pages_external_port}}:{{pages_port}} \
+{% endif %}
 {% if ssh_port != "" %}
             --publish {{ssh_port}}:22 \
 {% endif %}

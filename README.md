@@ -50,6 +50,10 @@ This role is tested only on Ubuntu 16.04
 | smtp.tls                  | boolean | no | <empty>   | Use TLS?                               |
 | backup_keep_time          | number  | no | <empty>   | The duration in seconds to keep backups before they are allowed to be deleted |
 | disable_hsts              | boolean | no | no        | If you are running your GitLab instance behind a reverse proxy you probably don't want to configure HSTS in GitLab |
+| pages_enabled             | boolean | no | no        | Enables/Disables the Gitlab Pages feature |
+| pages_port                | number  | no | 8081      | Defines the (internal) port used for Gitlab Pages |
+| pages_external_port       | number  | yes |          | Defines the mapped port used for Gitlab Pages |
+| pages_external_url        | url     | yes |          | Defines the URL used for Gitlab Pages |
 
 ## Usage
 
@@ -93,13 +97,16 @@ minimal:
       data_volume: /srv/gitlab/data
       log_volume: /srv/gitlab/log
       backup_volume: /srv/gitlab/backups
-      external_url: http://your.gitlab.org
+      external_url: http://git.yourserver.org
       ssh_host: your.gitlab.org
       https_port: 10443
       http_port: 10080
       ssh_port: 10022
       shell_ssh_port: 10022
       disable_hsts: yes
+      pages_enabled: true
+      pages_external_port: 10081
+      pages_external_url: http://pages.yourserver.org/
       email:
         enabled: true
         from: 'gitlab@git.myserver.org'

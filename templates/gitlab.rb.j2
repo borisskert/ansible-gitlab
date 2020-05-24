@@ -1039,7 +1039,13 @@ nginx['listen_https'] = false
 
 ##! Define to enable GitLab Pages
 # pages_external_url "http://pages.example.com/"
+{% if pages_enabled | bool %}
+pages_external_url "{{ pages_external_url }}"
+{% endif %}
 # gitlab_pages['enable'] = false
+{% if pages_enabled | bool %}
+gitlab_pages['enable'] = true
+{% endif %}
 
 ##! Configure to expose GitLab Pages on external IP address, serving the HTTP
 # gitlab_pages['external_http'] = []
@@ -1056,6 +1062,10 @@ nginx['listen_https'] = false
 ##! Prometheus metrics for Pages docs: https://gitlab.com/gitlab-org/gitlab-pages/#enable-prometheus-metrics
 # gitlab_pages['metrics_address'] = ":9235"
 
+{% if pages_enabled | bool %}
+gitlab_pages['inplace_chroot'] = true
+{% endif %}
+
 ################################################################################
 ## GitLab Pages NGINX
 ################################################################################
@@ -1065,6 +1075,13 @@ nginx['listen_https'] = false
 
 # Below you can find settings that are exclusive to "GitLab Pages NGINX"
 # pages_nginx['enable'] = false
+{% if pages_enabled | bool %}
+pages_nginx['enable'] = true
+pages_nginx['listen_port'] = {{pages_port}}
+pages_nginx['redirect_http_to_https_port'] = {{pages_port}}
+pages_nginx['redirect_http_to_https'] = false
+pages_nginx['listen_https'] = false
+{% endif %}
 
 # gitlab_rails['pages_path'] = "/mnt/storage/pages"
 

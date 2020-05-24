@@ -14,6 +14,8 @@ platforms:
     box: ubuntu/xenial64
     memory: 4096
     cpus: 2
+    instance_raw_config_args:
+      - 'vm.network "private_network", ip: "192.168.33.71"'
 
 provisioner:
   name: ansible
