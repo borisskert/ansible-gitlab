@@ -9,7 +9,7 @@
     owner: root
     group: root
     mode: 0600
-  notify: Restart gitlab
+  notify: Restart gitlab service
 
 - include: setup-systemd-services.yml
 
@@ -17,7 +17,17 @@
   docker_image:
     name: "{{ image_name }}:{{ image_version }}"
     source: pull
-  notify: Restart gitlab
+  notify: Restart gitlab service
 
 - name: Reload systemd and restart Gitlab if neccessary
   meta: flush_handlers
+
+- name: Enable gitlab service (if not started)
+  service:
+    name: gitlab
+    enabled: true
+    state: started
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )

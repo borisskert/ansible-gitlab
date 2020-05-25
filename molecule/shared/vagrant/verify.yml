@@ -4,6 +4,13 @@
   become: true
 
   tasks:
+    - name: should start backup timer
+      service:
+        name: gitlab-backup.timer
+        state: started
+      register: backup_timer
+      failed_when: backup_timer.changed
+
     - name: Should GET root site
       get_url:
         url: http://localhost:10080/

@@ -7,8 +7,7 @@
     group: root
     mode: 0644
   notify:
-    - Reload systemd
-    - Restart gitlab
+    - Restart gitlab service
 
 - name: Create gitlab backup service
   template:
@@ -17,7 +16,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: Reload systemd
+  notify: Reload gitlab backup service
 
 - name: Create gitlab backup timer
   template:
@@ -26,36 +25,4 @@
     owner: root
     group: root
     mode: 0644
-  register: gitlab_backup_timer
-  notify: Reload systemd
-
-- name: Enable gitlab service
-  service:
-    name: gitlab
-    enabled: true
-  register: service_state
-  changed_when: service_state.status.SubState != 'running'
-  notify: Start gitlab service
-  when: not (
-    molecule_docker_environment is defined
-    and molecule_docker_environment | bool
-    )
-
-- name: Enable gitlab backup service
-  service:
-    name: "{{ gitlab_backup_service_name }}.service"
-    enabled: true
-  when: not (
-    molecule_docker_environment is defined
-    and molecule_docker_environment | bool
-    )
-
-- name: Enable and start gitlab backup timer
-  systemd:
-    name: "{{ gitlab_backup_service_name }}.timer"
-    state: started
-    enabled: true
-  when: not (
-    molecule_docker_environment is defined
-    and molecule_docker_environment | bool
-    )
+  notify: Reload gitlab backup timer

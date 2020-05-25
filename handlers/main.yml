@@ -1,27 +1,43 @@
 ---
-- name: Reload systemd
+- name: Start gitlab service
   systemd:
+    name: gitlab
+    state: started
+    daemon_reload: true
+  register: gitlab_service_start
+
+- name: Restart gitlab service
+  service:
+    name: gitlab
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  when: not (
+    gitlab_service_start is defined
+    and gitlab_service_start.changed
+    )
+    and not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )
+
+- name: Reload gitlab backup service
+  service:
+    name: "{{ gitlab_backup_service_name }}.service"
+    enabled: true
     daemon_reload: true
   when: not (
     molecule_docker_environment is defined
     and molecule_docker_environment | bool
     )
 
-- name: Start gitlab service
-  service:
-    name: gitlab
+- name: Reload gitlab backup timer
+  systemd:
+    name: "{{ gitlab_backup_service_name }}.timer"
     state: started
-  register: gitlab_service_start
-
-- name: Restart gitlab
-  service:
-    name: gitlab
-    state: restarted
+    enabled: true
+    daemon_reload: true
   when: not (
-    gitlab_service_start is defined
-    and gitlab_service_start.changed
-    )
-    and not (
     molecule_docker_environment is defined
     and molecule_docker_environment | bool
     )
