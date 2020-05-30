@@ -7,29 +7,29 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStartPre=-/usr/bin/docker rm -f {{container_name}}
+ExecStartPre=-/usr/bin/docker rm -f {{gitlab_docker_container_name}}
 
-ExecStart=/usr/bin/docker run --name {{container_name}} \
-            --volume {{config_volume}}:/etc/gitlab \
-            --volume {{data_volume}}:/var/opt/gitlab \
-            --volume {{log_volume}}:/var/log/gitlab \
-            --volume {{backup_volume}}:/var/opt/gitlab/backups \
-{% if https_port != "" %}
-            --publish {{interface}}:{{https_port}}:443 \
+ExecStart=/usr/bin/docker run --name {{gitlab_docker_container_name}} \
+            --volume {{gitlab_config_volume}}:/etc/gitlab \
+            --volume {{gitlab_data_volume}}:/var/opt/gitlab \
+            --volume {{gitlab_log_volume}}:/var/log/gitlab \
+            --volume {{gitlab_backup_volume}}:/var/opt/gitlab/backups \
+{% if gitlab_https_port is defined and gitlab_https_port > 0 %}
+            --publish {{gitlab_interface}}:{{gitlab_https_port}}:443 \
 {% endif %}
-{% if http_port != "" %}
-            --publish {{interface}}:{{http_port}}:80 \
+{% if gitlab_http_port is defined and gitlab_http_port > 0 %}
+            --publish {{gitlab_interface}}:{{gitlab_http_port}}:80 \
 {% endif %}
-{% if pages_enabled | bool %}
-            --publish {{interface}}:{{pages_external_port}}:{{pages_port}} \
+{% if gitlab_pages_enabled | bool %}
+            --publish {{gitlab_interface}}:{{gitlab_pages_external_port}}:{{gitlab_pages_port}} \
 {% endif %}
-{% if ssh_port != "" %}
-            --publish {{ssh_port}}:22 \
+{% if gitlab_ssh_port is defined and gitlab_ssh_port > 0 %}
+            --publish {{gitlab_ssh_port}}:22 \
 {% endif %}
-            {{image_name}}:{{image_version}}
+            {{gitlab_image_name}}:{{gitlab_image_version}}
 
-ExecStop=-/usr/bin/docker stop {{container_name}}
-ExecStopPost=-/usr/bin/docker rm -f {{container_name}}
+ExecStop=-/usr/bin/docker stop {{gitlab_docker_container_name}}
+ExecStopPost=-/usr/bin/docker rm -f {{gitlab_docker_container_name}}
 
 Restart=always
 RestartSec=60s

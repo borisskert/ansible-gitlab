@@ -1,7 +1,7 @@
 ---
 - name: Create gitlab config directory
   file:
-    path: "{{ config_volume }}"
+    path: "{{ gitlab_config_volume }}"
     state: directory
     owner: root
     group: root
@@ -9,7 +9,7 @@
 
 - name: Create gitlab data directory
   file:
-    path: "{{ data_volume }}"
+    path: "{{ gitlab_data_volume }}"
     state: directory
     owner: root
     group: root
@@ -17,7 +17,7 @@
 
 - name: Create gitlab log directory
   file:
-    path: "{{ log_volume }}"
+    path: "{{ gitlab_log_volume }}"
     state: directory
     owner: root
     group: root
@@ -25,7 +25,7 @@
 
 - name: Create gitlab backup directory
   file:
-    path: "{{ backup_volume }}"
+    path: "{{ gitlab_backup_volume }}"
     state: directory
     owner: "{{ gitlab_user_id }}"
     group: root

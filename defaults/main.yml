@@ -1,48 +1,49 @@
 ---
-image_name: gitlab/gitlab-ce
-image_version: 12.9.2-ce.0
+gitlab_image_name: gitlab/gitlab-ce
+gitlab_image_version: latest
 
-interface: 0.0.0.0
-https_port: 443
-http_port: 80
-ssh_port: 10022
+gitlab_interface: 0.0.0.0
+gitlab_https_port: 443
+gitlab_http_port: 80
+gitlab_ssh_port: 10022
 
-config_volume: ''
-data_volume: ''
-log_volume: ''
-backup_volume: ''
+gitlab_config_volume: ''
+gitlab_data_volume: ''
+gitlab_log_volume: ''
+gitlab_backup_volume: ''
 
-external_url: ''
-ssh_host: ''
-shell_ssh_port: ''
+gitlab_external_url: ''
+gitlab_ssh_host: ''
+gitlab_shell_ssh_port: ''
 
-email:
-  enabled: false
-  from: ''
-  display_name: ''
-  reply_to: ''
-  subject_suffix: ''
+# ----------------------------------------------------------------------------------------------------------------------
+# Email settings
+# ----------------------------------------------------------------------------------------------------------------------
+gitlab_email_enabled: false
+gitlab_email_from: ''
+gitlab_email_display_name: ''
+gitlab_email_reply_to: ''
+gitlab_email_subject_suffix: ''
 
-smtp:
-  address: ''
-  port: 465
-  user_name: ''
-  password: ''
-  domain: ''
-  enable_starttls_auto: ''
-  tls: ''
+gitlab_smtp_address: ''
+gitlab_smtp_port: 465
+gitlab_smtp_user_name: ''
+gitlab_smtp_password: ''
+gitlab_smtp_domain: ''
+gitlab_smtp_enable_starttls_auto: ''
+gitlab_smtp_tls: ''
 
-backup_keep_time: ''
+gitlab_backup_keep_time: ''
 
 # if you are running your GitLab instance behind a reverse proxy
 # you probably don't want to configure HSTS in GitLab but in your reverse proxy
-disable_hsts: false
+gitlab_nginx_disable_hsts: false
 
-container_name: gitlab.service
+gitlab_docker_container_name: gitlab.service
 gitlab_user_id: '998'
 gitlab_backup_service_name: gitlab-backup
 
-pages_enabled: false
-pages_port: 8081
-pages_external_port: null
-pages_external_url: null
+gitlab_pages_enabled: false
+gitlab_pages_port: 8081
+gitlab_pages_external_port: null
+gitlab_pages_external_url: null

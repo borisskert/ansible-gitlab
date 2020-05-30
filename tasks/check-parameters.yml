@@ -1,63 +1,63 @@
 ---
-- name: Check 'config_volume' parameter
+- name: Check 'gitlab_config_volume' parameter
   assert:
     that:
-      - "config_volume is defined"
-      - "config_volume | length > 0"
-    fail_msg: "parameter 'config_volume' is missing"
+      - "gitlab_config_volume is defined"
+      - "gitlab_config_volume | length > 0"
+    fail_msg: "parameter 'gitlab_config_volume' is missing"
 
-- name: Check 'data_volume' parameter
+- name: Check 'gitlab_data_volume' parameter
   assert:
     that:
-      - "data_volume is defined"
-      - "data_volume | length > 0"
-    fail_msg: "parameter 'data_volume' is missing"
+      - "gitlab_data_volume is defined"
+      - "gitlab_data_volume | length > 0"
+    fail_msg: "parameter 'gitlab_data_volume' is missing"
 
-- name: Check 'log_volume' parameter
+- name: Check 'gitlab_log_volume' parameter
   assert:
     that:
-      - "log_volume is defined"
-      - "log_volume | length > 0"
-    fail_msg: "parameter 'log_volume' is missing"
+      - "gitlab_log_volume is defined"
+      - "gitlab_log_volume | length > 0"
+    fail_msg: "parameter 'gitlab_log_volume' is missing"
 
-- name: Check 'backup_volume' parameter
+- name: Check 'gitlab_backup_volume' parameter
   assert:
     that:
-      - "backup_volume is defined"
-      - "backup_volume | length > 0"
-    fail_msg: "parameter 'backup_volume' is missing"
+      - "gitlab_backup_volume is defined"
+      - "gitlab_backup_volume | length > 0"
+    fail_msg: "parameter 'gitlab_backup_volume' is missing"
 
-- name: Check 'pages_enabled' parameter
+- name: Check 'gitlab_pages_enabled' parameter
   assert:
     that:
-      - "pages_enabled is defined"
-    fail_msg: "parameter 'pages_enabled' is missing"
+      - "gitlab_pages_enabled is defined"
+    fail_msg: "parameter 'gitlab_pages_enabled' is missing"
 
-- name: Check 'pages_port' parameter
+- name: Check 'gitlab_pages_port' parameter
   assert:
     that:
-      - "pages_port is defined"
-      - "pages_port > 0"
-      - "pages_port < 65536"
-    fail_msg: "parameter 'pages_port' is missing"
-  when: pages_enabled is defined
-    and pages_enabled | bool
+      - "gitlab_pages_port is defined"
+      - "gitlab_pages_port > 0"
+      - "gitlab_pages_port < 65536"
+    fail_msg: "parameter 'gitlab_pages_port' is missing"
+  when: gitlab_pages_enabled is defined
+    and gitlab_pages_enabled | bool
 
-- name: Check 'pages_external_port' parameter
+- name: Check 'gitlab_pages_external_port' parameter
   assert:
     that:
-      - "pages_external_port is defined"
-      - "pages_external_port > 0"
-      - "pages_external_port < 65536"
-    fail_msg: "parameter 'pages_external_port' is missing"
-  when: pages_enabled is defined
-    and pages_enabled | bool
+      - "gitlab_pages_external_port is defined"
+      - "gitlab_pages_external_port > 0"
+      - "gitlab_pages_external_port < 65536"
+    fail_msg: "parameter 'gitlab_pages_external_port' is missing"
+  when: gitlab_pages_enabled is defined
+    and gitlab_pages_enabled | bool
 
-- name: Check 'pages_external_url' parameter
+- name: Check 'gitlab_pages_external_url' parameter
   assert:
     that:
-      - "pages_external_url is defined"
-      - "pages_external_url | length > 0"
-    fail_msg: "parameter 'pages_external_url' is missing"
-  when: pages_enabled is defined
-    and pages_enabled | bool
+      - "gitlab_pages_external_url is defined"
+      - "gitlab_pages_external_url | length > 0"
+    fail_msg: "parameter 'gitlab_pages_external_url' is missing"
+  when: gitlab_pages_enabled is defined
+    and gitlab_pages_enabled | bool

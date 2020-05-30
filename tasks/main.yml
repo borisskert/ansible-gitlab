@@ -5,7 +5,7 @@
 - name: Setup gitlab config
   template:
     src: gitlab.rb.j2
-    dest: "{{ config_volume }}/gitlab.rb"
+    dest: "{{ gitlab_config_volume }}/gitlab.rb"
     owner: root
     group: root
     mode: 0600
@@ -15,7 +15,7 @@
 
 - name: pull image (to avoid long down-times)
   docker_image:
-    name: "{{ image_name }}:{{ image_version }}"
+    name: "{{ gitlab_image_name }}:{{ gitlab_image_version }}"
     source: pull
   notify: Restart gitlab service
 

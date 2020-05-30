@@ -10,8 +10,8 @@
 ##! URL on which GitLab will be reachable.
 ##! For more details on configuring external_url see:
 ##! https://docs.gitlab.com/omnibus/settings/configuration.html#configuring-the-external-url-for-gitlab
-{% if external_url != "" %}
-external_url '{{external_url}}'
+{% if gitlab_external_url != "" %}
+external_url '{{gitlab_external_url}}'
 {% else %}
 external_url 'GENERATED_EXTERNAL_URL'
 {% endif %}
@@ -41,30 +41,30 @@ external_url 'GENERATED_EXTERNAL_URL'
 ##! Docs: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/gitlab.yml.md
 ################################################################################
 # gitlab_rails['gitlab_ssh_host'] = 'ssh.host_example.com'
-{% if ssh_host != "" %}
-gitlab_rails['gitlab_ssh_host'] = '{{ssh_host}}'
+{% if gitlab_ssh_host != "" %}
+gitlab_rails['gitlab_ssh_host'] = '{{gitlab_ssh_host}}'
 {% endif %}
 # gitlab_rails['time_zone'] = 'UTC'
 
 ### Email Settings
-{% if email.enabled == true %}
+{% if gitlab_email_enabled == true %}
 gitlab_rails['gitlab_email_enabled'] = true
 {% endif %}
 
-{% if email.from != "" %}
-gitlab_rails['gitlab_email_from'] = '{{email.from}}'
+{% if gitlab_email_from != "" %}
+gitlab_rails['gitlab_email_from'] = '{{gitlab_email_from}}'
 {% endif %}
 
-{% if email.display_name != "" %}
-gitlab_rails['gitlab_email_display_name'] = '{{email.display_name}}'
+{% if gitlab_email_display_name != "" %}
+gitlab_rails['gitlab_email_display_name'] = '{{gitlab_email_display_name}}'
 {% endif %}
 
-{% if email.reply_to != "" %}
-gitlab_rails['gitlab_email_reply_to'] = '{{email.reply_to}}'
+{% if gitlab_email_reply_to != "" %}
+gitlab_rails['gitlab_email_reply_to'] = '{{gitlab_email_reply_to}}'
 {% endif %}
 
-{% if email.subject_suffix != "" %}
-gitlab_rails['gitlab_email_subject_suffix'] = '{{email.subject_suffix}}'
+{% if gitlab_email_subject_suffix != "" %}
+gitlab_rails['gitlab_email_subject_suffix'] = '{{gitlab_email_subject_suffix}}'
 {% endif %}
 
 # gitlab_rails['gitlab_email_enabled'] = true
@@ -284,8 +284,8 @@ gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
 # gitlab_rails['backup_pg_schema'] = 'public'
 
 ###! The duration in seconds to keep backups before they are allowed to be deleted
-{% if backup_keep_time != "" %}
-gitlab_rails['backup_keep_time'] = {{backup_keep_time}}
+{% if gitlab_backup_keep_time != "" %}
+gitlab_rails['backup_keep_time'] = {{gitlab_backup_keep_time}}
 {% endif %}
 
 # gitlab_rails['backup_upload_connection'] = {
@@ -328,8 +328,8 @@ gitlab_rails['backup_keep_time'] = {{backup_keep_time}}
 # gitlab_rails['shared_path'] = '/var/opt/gitlab/gitlab-rails/shared'
 
 ### GitLab Shell settings for GitLab
-{% if shell_ssh_port != "" %}
-gitlab_rails['gitlab_shell_ssh_port'] = {{shell_ssh_port}}
+{% if gitlab_shell_ssh_port != "" %}
+gitlab_rails['gitlab_shell_ssh_port'] = {{gitlab_shell_ssh_port}}
 {% endif %}
 # gitlab_rails['git_max_size'] = 20971520
 # gitlab_rails['git_timeout'] = 10
@@ -432,33 +432,33 @@ gitlab_rails['gitlab_shell_ssh_port'] = {{shell_ssh_port}}
 ### GitLab email server settings
 ###! Docs: https://docs.gitlab.com/omnibus/settings/smtp.html
 ###! **Use smtp instead of sendmail/postfix.**
-{% if smtp.address != "" %}
+{% if gitlab_smtp_address != "" %}
 gitlab_rails['smtp_enable'] = true
-gitlab_rails['smtp_address'] = "{{smtp.address}}"
-gitlab_rails['smtp_port'] = {{smtp.port}}
+gitlab_rails['smtp_address'] = "{{gitlab_smtp_address}}"
+gitlab_rails['smtp_port'] = {{gitlab_smtp_port}}
 {% endif %}
 
-{% if smtp.user_name is defined and smtp.user_name != "" %}
-gitlab_rails['smtp_user_name'] = "{{smtp.user_name}}"
+{% if gitlab_smtp_user_name is defined and gitlab_smtp_user_name != "" %}
+gitlab_rails['smtp_user_name'] = "{{gitlab_smtp_user_name}}"
 {% endif %}
 
-{% if smtp.password is defined and smtp.password != "" %}
-gitlab_rails['smtp_password'] = "{{smtp.password}}"
+{% if gitlab_smtp_password is defined and gitlab_smtp_password != "" %}
+gitlab_rails['smtp_password'] = "{{gitlab_smtp_password}}"
 {% endif %}
 
-{% if smtp.domain is defined and smtp.domain != "" %}
-gitlab_rails['smtp_domain'] = "{{smtp.domain}}"
+{% if gitlab_smtp_domain is defined and gitlab_smtp_domain != "" %}
+gitlab_rails['smtp_domain'] = "{{gitlab_smtp_domain}}"
 {% endif %}
 
-{% if smtp.enable_starttls_auto == true %}
+{% if gitlab_smtp_enable_starttls_auto == true %}
 gitlab_rails['smtp_enable_starttls_auto'] = true
-{% elif smtp.enable_starttls_auto == false %}
+{% elif gitlab_smtp_enable_starttls_auto == false %}
 gitlab_rails['smtp_enable_starttls_auto'] = false
 {% endif %}
 
-{% if smtp.tls == true %}
+{% if gitlab_smtp_tls == true %}
 gitlab_rails['smtp_tls'] = true
-{% elif smtp.tls == false %}
+{% elif gitlab_smtp_tls == false %}
 gitlab_rails['smtp_tls'] = false
 {% endif %}
 
@@ -878,7 +878,7 @@ gitlab_rails['smtp_tls'] = false
 
 ##! **Defaults to forcing web browsers to always communicate using only HTTPS**
 ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html#setting-http-strict-transport-security
-{% if disable_hsts | bool %}
+{% if gitlab_nginx_disable_hsts | bool %}
 # HSTS disabled by ansible install-gitlab role
 nginx['hsts_max_age'] = 0
 {% else %}
@@ -1038,12 +1038,12 @@ nginx['listen_https'] = false
 ################################################################################
 
 ##! Define to enable GitLab Pages
-# pages_external_url "http://pages.example.com/"
-{% if pages_enabled | bool %}
-pages_external_url "{{ pages_external_url }}"
+# gitlab_pages_external_url "http://pages.example.com/"
+{% if gitlab_pages_enabled | bool %}
+pages_external_url "{{ gitlab_pages_external_url }}"
 {% endif %}
 # gitlab_pages['enable'] = false
-{% if pages_enabled | bool %}
+{% if gitlab_pages_enabled | bool %}
 gitlab_pages['enable'] = true
 {% endif %}
 
@@ -1062,7 +1062,7 @@ gitlab_pages['enable'] = true
 ##! Prometheus metrics for Pages docs: https://gitlab.com/gitlab-org/gitlab-pages/#enable-prometheus-metrics
 # gitlab_pages['metrics_address'] = ":9235"
 
-{% if pages_enabled | bool %}
+{% if gitlab_pages_enabled | bool %}
 gitlab_pages['inplace_chroot'] = true
 {% endif %}
 
@@ -1075,10 +1075,10 @@ gitlab_pages['inplace_chroot'] = true
 
 # Below you can find settings that are exclusive to "GitLab Pages NGINX"
 # pages_nginx['enable'] = false
-{% if pages_enabled | bool %}
+{% if gitlab_pages_enabled | bool %}
 pages_nginx['enable'] = true
-pages_nginx['listen_port'] = {{pages_port}}
-pages_nginx['redirect_http_to_https_port'] = {{pages_port}}
+pages_nginx['listen_port'] = {{gitlab_pages_port}}
+pages_nginx['redirect_http_to_https_port'] = {{gitlab_pages_port}}
 pages_nginx['redirect_http_to_https'] = false
 pages_nginx['listen_https'] = false
 {% endif %}

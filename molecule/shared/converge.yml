@@ -5,34 +5,32 @@
 
   roles:
     - role: ansible-gitlab
-      image_version: 13.0.0-ce.0
-      # image_version: 12.9.2-ce.0
-      # image_version: 12.10.6-ce.0
-      # image_version: 13.0.0-ce.0
-      config_volume: /srv/gitlab/config
-      data_volume: /srv/gitlab/data
-      log_volume: /srv/gitlab/log
-      backup_volume: /srv/gitlab/backups
-      external_url: http://192.168.33.71:10080
-      ssh_host: localhost
-      https_port: 10443
-      http_port: 10080
-      ssh_port: 10022
-      shell_ssh_port: 10022
-      disable_hsts: true
-      pages_enabled: true
-      pages_external_port: 10081
-      pages_external_url: http://192.168.33.71:10081
-      email:
-        enabled: true
-        from: 'gitlab@git.myserver.org'
-        display_name: 'gitlab@git.myserver.org'
-        reply_to: 'gitlab@git.myserver.org'
-        subject_suffix: '[Gitlab]'
-      smtp:
-        address: '127.0.0.1'
-        port: 25
-        domain: 'git.myserver.org'
-        enable_starttls_auto: false
-        tls: false
-      backup_keep_time: 604800
+      gitlab_image_version: 13.0.0-ce.0
+      # gitlab_image_version: 12.9.2-ce.0
+      # gitlab_image_version: 12.10.6-ce.0
+      # gitlab_image_version: 13.0.0-ce.0
+      gitlab_config_volume: /srv/gitlab/config
+      gitlab_data_volume: /srv/gitlab/data
+      gitlab_log_volume: /srv/gitlab/log
+      gitlab_backup_volume: /srv/gitlab/backups
+      gitlab_external_url: http://192.168.33.71:10080
+      gitlab_ssh_host: localhost
+      gitlab_https_port: 10443
+      gitlab_http_port: 10080
+      gitlab_ssh_port: 10022
+      gitlab_shell_ssh_port: 10022
+      gitlab_nginx_disable_hsts: true
+      gitlab_pages_enabled: true
+      gitlab_pages_external_port: 10081
+      gitlab_pages_external_url: http://192.168.33.71:10081/
+      gitlab_email_enabled: true
+      gitlab_email_from: 'gitlab@git.myserver.org'
+      gitlab_email_display_name: 'gitlab@git.myserver.org'
+      gitlab_email_reply_to: 'gitlab@git.myserver.org'
+      gitlab_email_subject_suffix: '[Gitlab]'
+      gitlab_smtp_address: '127.0.0.1'
+      gitlab_smtp_port: 25
+      gitlab_smtp_domain: 'git.myserver.org'
+      gitlab_smtp_enable_starttls_auto: false
+      gitlab_smtp_tls: false
+      gitlab_backup_keep_time: 604800
