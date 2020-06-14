@@ -1,7 +1,16 @@
 # ansible-gitlab
 
 Ansible role to install gitlab as docker service.
-This role is tested only on Ubuntu 16.04
+
+## Supported operating systems:
+
+* Ubuntu:
+  * 16.04 (xenial)
+  * 18.04 (bionic)
+  * 20.04 (focal)
+* Debian
+  * 9 (stretch)
+  * 10 (buster)
 
 ## System requirements
 
@@ -54,6 +63,8 @@ This role is tested only on Ubuntu 16.04
 | gitlab_pages_port                | number  | no | 8081      | Defines the (internal) port used for Gitlab Pages |
 | gitlab_pages_external_port       | number  | yes |          | Defines the mapped port used for Gitlab Pages |
 | gitlab_pages_external_url        | url     | yes |          | Defines the URL used for Gitlab Pages |
+| gitlab_disable_prometheus        | boolean | no  |          | Disable prometheus exporter |
+| gitlab_sidekiq_concurrency       | number  | no  |          | Setup the number of sidekiq concurrency processes |
 
 ## Usage
 
@@ -87,7 +98,7 @@ minimal:
 
   roles:
     - role: install-gitlab
-      gitlab_image_version: 12.9.2-ce.0
+      gitlab_image_version: 13.0.6-ce.0
       gitlab_config_volume: /srv/gitlab/config
       gitlab_data_volume: /srv/gitlab/data
       gitlab_log_volume: /srv/gitlab/log
@@ -115,6 +126,8 @@ minimal:
       gitlab_smtp_enable_starttls_auto: true
       gitlab_smtp_tls: true
       gitlab_backup_keep_time: 604800
+      gitlab_disable_prometheus: true
+      gitlab_sidekiq_concurrency: 4
 ```
 
 ## Testing

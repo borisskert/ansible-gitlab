@@ -5,7 +5,7 @@
 
   roles:
     - role: ansible-gitlab
-      gitlab_image_version: 13.0.0-ce.0
+      gitlab_image_version: 13.0.6-ce.0
       # gitlab_image_version: 12.9.2-ce.0
       # gitlab_image_version: 12.10.6-ce.0
       # gitlab_image_version: 13.0.0-ce.0
@@ -34,3 +34,5 @@
       gitlab_smtp_enable_starttls_auto: false
       gitlab_smtp_tls: false
       gitlab_backup_keep_time: 604800
+      gitlab_disable_prometheus: true
+      gitlab_sidekiq_concurrency: 4

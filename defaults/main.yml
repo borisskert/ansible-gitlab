@@ -47,3 +47,6 @@ gitlab_pages_enabled: false
 gitlab_pages_port: 8081
 gitlab_pages_external_port: null
 gitlab_pages_external_url: null
+
+gitlab_disable_prometheus: false
+gitlab_sidekiq_concurrency: ''
