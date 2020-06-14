@@ -14,16 +14,16 @@ ExecStart=/usr/bin/docker run --name {{ gitlab_docker_container_name }} \
             --volume {{ gitlab_data_volume }}:/var/opt/gitlab \
             --volume {{ gitlab_log_volume }}:/var/log/gitlab \
             --volume {{ gitlab_backup_volume }}:/var/opt/gitlab/backups \
-{% if gitlab_https_port is defined and gitlab_https_port > 0 %}
+{% if gitlab_https_port is defined and gitlab_https_port | int > 0 %}
             --publish {{ gitlab_interface }}:{{ gitlab_https_port }}:443 \
 {% endif %}
-{% if gitlab_http_port is defined and gitlab_http_port > 0 %}
+{% if gitlab_http_port is defined and gitlab_http_port | int > 0 %}
             --publish {{ gitlab_interface }}:{{ gitlab_http_port }}:80 \
 {% endif %}
 {% if gitlab_pages_enabled | bool %}
             --publish {{ gitlab_interface }}:{{ gitlab_pages_external_port }}:{{gitlab_pages_port}} \
 {% endif %}
-{% if gitlab_ssh_port is defined and gitlab_ssh_port > 0 %}
+{% if gitlab_ssh_port is defined and gitlab_ssh_port | int > 0 %}
             --publish {{ gitlab_ssh_port }}:22 \
 {% endif %}
             {{ gitlab_image_name }}:{{ gitlab_image_version }}

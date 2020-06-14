@@ -37,8 +37,8 @@
   assert:
     that:
       - "gitlab_pages_port is defined"
-      - "gitlab_pages_port > 0"
-      - "gitlab_pages_port < 65536"
+      - "gitlab_pages_port | int > 0"
+      - "gitlab_pages_port | int < 65536"
     fail_msg: "parameter 'gitlab_pages_port' is missing"
   when: gitlab_pages_enabled is defined
     and gitlab_pages_enabled | bool
@@ -47,8 +47,8 @@
   assert:
     that:
       - "gitlab_pages_external_port is defined"
-      - "gitlab_pages_external_port > 0"
-      - "gitlab_pages_external_port < 65536"
+      - "gitlab_pages_external_port | int > 0"
+      - "gitlab_pages_external_port | int < 65536"
     fail_msg: "parameter 'gitlab_pages_external_port' is missing"
   when: gitlab_pages_enabled is defined
     and gitlab_pages_enabled | bool

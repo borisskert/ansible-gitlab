@@ -3,6 +3,13 @@
   hosts: all
   become: true
 
+  vars:
+    gitlab:
+      www_port: 10080
+      pages_port: 10081
+      https_port: 10443
+      ssh_port: 10022
+
   roles:
     - role: ansible-gitlab
       gitlab_image_version: 13.0.6-ce.0
@@ -13,15 +20,15 @@
       gitlab_data_volume: /srv/gitlab/data
       gitlab_log_volume: /srv/gitlab/log
       gitlab_backup_volume: /srv/gitlab/backups
-      gitlab_external_url: http://192.168.33.71:10080
+      gitlab_external_url: "http://192.168.33.71:{{ gitlab.www_port }}"
       gitlab_ssh_host: localhost
-      gitlab_https_port: 10443
-      gitlab_http_port: 10080
-      gitlab_ssh_port: 10022
-      gitlab_shell_ssh_port: 10022
+      gitlab_https_port: "{{ gitlab.https_port }}"
+      gitlab_http_port: "{{ gitlab.www_port }}"
+      gitlab_ssh_port: "{{ gitlab.ssh_port }}"
+      gitlab_shell_ssh_port: "{{ gitlab.ssh_port }}"
       gitlab_nginx_disable_hsts: true
       gitlab_pages_enabled: true
-      gitlab_pages_external_port: 10081
+      gitlab_pages_external_port: "{{ gitlab.pages_port }}"
       gitlab_pages_external_url: http://192.168.33.71:10081/
       gitlab_email_enabled: true
       gitlab_email_from: 'gitlab@git.myserver.org'
