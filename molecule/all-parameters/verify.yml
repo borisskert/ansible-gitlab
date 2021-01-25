@@ -1,0 +1,215 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Should create config file
+      slurp:
+        src: /srv/my_gitlab/config/gitlab.rb
+      register: gitlab_config_file
+      failed_when:
+        not gitlab_config_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          ## GitLab configuration settings
+          ##! This file is generated during initial installation and **is not** modified
+          ##! during upgrades.
+          ##! Check out the latest version of this file to know about the different
+          ##! settings that can be configured by this file, which may be found at:
+          ##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
+
+
+          ## GitLab URL
+          external_url 'http://192.168.33.71:10080'
+
+          ################################################################################
+          ################################################################################
+          ##                Configuration Settings for GitLab CE and EE                 ##
+          ################################################################################
+          ################################################################################
+
+          ################################################################################
+          gitlab_rails['gitlab_ssh_host'] = 'localhost'
+
+          ### Email Settings
+          gitlab_rails['gitlab_email_enabled'] = true
+
+          gitlab_rails['gitlab_email_from'] = 'gitlab@git.myserver.org'
+
+          gitlab_rails['gitlab_email_display_name'] = 'gitlab@git.myserver.org'
+
+          gitlab_rails['gitlab_email_reply_to'] = 'gitlab@git.myserver.org'
+
+          gitlab_rails['gitlab_email_subject_suffix'] = '[Gitlab]'
+
+          ### Backup Settings
+          gitlab_rails['manage_backup_path'] = true
+          gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
+          gitlab_rails['backup_keep_time'] = 604800
+
+          ### GitLab Shell settings for GitLab
+          gitlab_rails['gitlab_shell_ssh_port'] = 10022
+
+          ### GitLab email server settings
+          gitlab_rails['smtp_enable'] = true
+          gitlab_rails['smtp_address'] = "127.0.0.1"
+          gitlab_rails['smtp_port'] = 25
+
+
+
+          gitlab_rails['smtp_domain'] = "git.myserver.org"
+
+          gitlab_rails['smtp_enable_starttls_auto'] = false
+
+          gitlab_rails['smtp_tls'] = false
+
+          ################################################################################
+          ## GitLab Sidekiq
+          ################################################################################
+          sidekiq['concurrency'] = 4
+
+          ################################################################################
+          ## GitLab NGINX
+          ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html
+          ################################################################################
+          nginx['hsts_max_age'] = 0
+
+          nginx['listen_port'] = 80
+          nginx['listen_https'] = false
+
+          ################################################################################
+          ## GitLab Pages
+          ##! Docs: https://docs.gitlab.com/ce/pages/administration.html
+          ################################################################################
+          pages_external_url "http://192.168.33.71:10081/"
+          gitlab_pages['enable'] = true
+
+          gitlab_pages['inplace_chroot'] = true
+
+          ################################################################################
+          ## GitLab Pages NGINX
+          ################################################################################
+          pages_nginx['enable'] = true
+          pages_nginx['listen_port'] = 8081
+          pages_nginx['redirect_http_to_https_port'] = 8081
+          pages_nginx['redirect_http_to_https'] = false
+          pages_nginx['listen_https'] = false
+
+          ################################################################################
+          ## Prometheus Node Exporter
+          ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/node_exporter.html
+          ################################################################################
+          prometheus_monitoring['enable'] = false
+
+    - name: Should create systemd unit file
+      slurp:
+        src: /etc/systemd/system/gitlab.service
+      register: gitlab_service_file
+      failed_when:
+        not gitlab_service_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Install]
+          WantedBy=multi-user.target
+
+          [Unit]
+          Description=gitlab service
+          After=docker.service
+          Requires=docker.service
+
+          [Service]
+          ExecStartPre=-/usr/bin/docker rm -f gitlab.service
+
+          ExecStart=/usr/bin/docker run --name gitlab.service \
+                      --volume /srv/my_gitlab/config:/etc/gitlab \
+                      --volume /srv/my_gitlab/data:/var/opt/gitlab \
+                      --volume /srv/my_gitlab/log:/var/log/gitlab \
+                      --volume /srv/my_gitlab/backup:/var/opt/gitlab/backups \
+                      --publish 127.0.0.1:10443:443 \
+                      --publish 127.0.0.1:10080:80 \
+                      --publish 127.0.0.1:10081:8081 \
+                      --publish 10022:22 \
+                      gitlab/gitlab-ce:13.0.6-ce.0
+
+          ExecStop=-/usr/bin/docker stop gitlab.service
+          ExecStopPost=-/usr/bin/docker rm -f gitlab.service
+
+          Restart=always
+          RestartSec=60s
+          TimeoutSec=3600
+
+    - name: Should create backup systemd timer file
+      slurp:
+        src: /etc/systemd/system/gitlab-backup.timer
+      register: backup_timer_file
+      failed_when:
+        not backup_timer_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Unit]
+          Description=Run daily a gitlab backup
+
+          [Timer]
+          OnCalendar = daily
+          Persistent=true
+
+          [Install]
+          WantedBy=timers.target
+
+    - name: should start backup timer
+      service:
+        name: gitlab-backup.timer
+        state: started
+      register: backup_timer
+      failed_when: backup_timer.changed
+
+    - name: Should create config volume
+      stat:
+        path: /srv/my_gitlab/config
+      register: config_volume_directory
+      failed_when: not config_volume_directory.stat.exists
+
+    - name: Should create data volume
+      stat:
+        path: /srv/my_gitlab/data
+      register: data_volume_directory
+      failed_when: not data_volume_directory.stat.exists
+
+    - name: Should create log volume
+      stat:
+        path: /srv/my_gitlab/log
+      register: log_volume_directory
+      failed_when: not log_volume_directory.stat.exists
+
+    - name: Should create backups volume
+      stat:
+        path: /srv/my_gitlab/backup
+      register: backup_volume_directory
+      failed_when: not backup_volume_directory.stat.exists
+
+    - name: Should open 10080/tcp port
+      command: nc -z -w1 localhost 10080
+      changed_when: false
+      register: netcat_10080
+      retries: 300
+      delay: 1
+      until: netcat_10080 is defined
+        and netcat_10080.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )
+
+    - name: Should open 10081/tcp port
+      command: nc -z -w1 localhost 10081
+      changed_when: false
+      register: netcat_10081
+      retries: 300
+      delay: 1
+      until: netcat_10081 is defined
+        and netcat_10081.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )

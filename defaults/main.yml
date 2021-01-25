@@ -7,10 +7,10 @@ gitlab_https_port: 443
 gitlab_http_port: 80
 gitlab_ssh_port: 10022
 
-gitlab_config_volume: ''
-gitlab_data_volume: ''
-gitlab_log_volume: ''
-gitlab_backup_volume: ''
+gitlab_config_volume: /srv/gitlab/config
+gitlab_data_volume: /srv/gitlab/data
+gitlab_log_volume: /srv/gitlab/log
+gitlab_backup_volume: /srv/gitlab/backup
 
 gitlab_external_url: ''
 gitlab_ssh_host: ''
@@ -49,4 +49,4 @@ gitlab_pages_external_port: null
 gitlab_pages_external_url: null
 
 gitlab_disable_prometheus: false
-gitlab_sidekiq_concurrency: ''
+gitlab_sidekiq_concurrency: 0

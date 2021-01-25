@@ -13,15 +13,13 @@
   roles:
     - role: ansible-gitlab
       gitlab_image_version: 13.0.6-ce.0
-      # gitlab_image_version: 12.9.2-ce.0
-      # gitlab_image_version: 12.10.6-ce.0
-      # gitlab_image_version: 13.0.0-ce.0
-      gitlab_config_volume: /srv/gitlab/config
-      gitlab_data_volume: /srv/gitlab/data
-      gitlab_log_volume: /srv/gitlab/log
-      gitlab_backup_volume: /srv/gitlab/backups
+      gitlab_config_volume: /srv/my_gitlab/config
+      gitlab_data_volume: /srv/my_gitlab/data
+      gitlab_log_volume: /srv/my_gitlab/log
+      gitlab_backup_volume: /srv/my_gitlab/backup
       gitlab_external_url: "http://192.168.33.71:{{ gitlab.www_port }}"
       gitlab_ssh_host: localhost
+      gitlab_interface: 127.0.0.1
       gitlab_https_port: "{{ gitlab.https_port }}"
       gitlab_http_port: "{{ gitlab.www_port }}"
       gitlab_ssh_port: "{{ gitlab.ssh_port }}"

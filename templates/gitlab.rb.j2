@@ -7,7 +7,7 @@
 
 
 ## GitLab URL
-{% if gitlab_external_url != "" %}
+{% if gitlab_external_url is defined and gitlab_external_url | length > 0 %}
 external_url '{{gitlab_external_url}}'
 {% else %}
 external_url 'GENERATED_EXTERNAL_URL'
@@ -20,7 +20,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 ################################################################################
-{% if gitlab_ssh_host != "" %}
+{% if gitlab_ssh_host is defined and gitlab_ssh_host | length > 0 %}
 gitlab_rails['gitlab_ssh_host'] = '{{gitlab_ssh_host}}'
 {% endif %}
 
@@ -29,19 +29,19 @@ gitlab_rails['gitlab_ssh_host'] = '{{gitlab_ssh_host}}'
 gitlab_rails['gitlab_email_enabled'] = true
 {% endif %}
 
-{% if gitlab_email_from != "" %}
+{% if gitlab_email_from is defined and gitlab_email_from | length > 0 %}
 gitlab_rails['gitlab_email_from'] = '{{gitlab_email_from}}'
 {% endif %}
 
-{% if gitlab_email_display_name != "" %}
+{% if gitlab_email_display_name is defined and gitlab_email_display_name | length > 0 %}
 gitlab_rails['gitlab_email_display_name'] = '{{gitlab_email_display_name}}'
 {% endif %}
 
-{% if gitlab_email_reply_to != "" %}
+{% if gitlab_email_reply_to is defined and gitlab_email_reply_to | length > 0 %}
 gitlab_rails['gitlab_email_reply_to'] = '{{gitlab_email_reply_to}}'
 {% endif %}
 
-{% if gitlab_email_subject_suffix != "" %}
+{% if gitlab_email_subject_suffix is defined and gitlab_email_subject_suffix | length > 0 %}
 gitlab_rails['gitlab_email_subject_suffix'] = '{{gitlab_email_subject_suffix}}'
 {% endif %}
 
@@ -58,21 +58,21 @@ gitlab_rails['gitlab_shell_ssh_port'] = {{gitlab_shell_ssh_port}}
 {% endif %}
 
 ### GitLab email server settings
-{% if gitlab_smtp_address != "" %}
+{% if gitlab_smtp_address is defined and gitlab_smtp_address | length > 0 %}
 gitlab_rails['smtp_enable'] = true
 gitlab_rails['smtp_address'] = "{{gitlab_smtp_address}}"
 gitlab_rails['smtp_port'] = {{gitlab_smtp_port}}
 {% endif %}
 
-{% if gitlab_smtp_user_name is defined and gitlab_smtp_user_name != "" %}
+{% if gitlab_smtp_user_name is defined and gitlab_smtp_user_name | length > 0 %}
 gitlab_rails['smtp_user_name'] = "{{gitlab_smtp_user_name}}"
 {% endif %}
 
-{% if gitlab_smtp_password is defined and gitlab_smtp_password != "" %}
+{% if gitlab_smtp_password is defined and gitlab_smtp_password | length > 0 %}
 gitlab_rails['smtp_password'] = "{{gitlab_smtp_password}}"
 {% endif %}
 
-{% if gitlab_smtp_domain is defined and gitlab_smtp_domain != "" %}
+{% if gitlab_smtp_domain is defined and gitlab_smtp_domain | length > 0 %}
 gitlab_rails['smtp_domain'] = "{{gitlab_smtp_domain}}"
 {% endif %}
 
@@ -110,7 +110,7 @@ nginx['listen_https'] = false
 ## GitLab Pages
 ##! Docs: https://docs.gitlab.com/ce/pages/administration.html
 ################################################################################
-{% if gitlab_pages_enabled | bool %}
+{% if gitlab_pages_enabled | bool and gitlab_pages_external_url is defined and gitlab_pages_external_url | length > 0 %}
 pages_external_url "{{ gitlab_pages_external_url }}"
 {% endif %}
 {% if gitlab_pages_enabled | bool %}

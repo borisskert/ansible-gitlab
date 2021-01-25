@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: ./molecule/default/requirements.yml
+
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+
+platforms:
+  - name: ansible-gitlab-focal
+    box: generic/ubuntu2004
+    memory: 4096
+    cpus: 2
+  - name: ansible-gitlab-buster
+    box: generic/debian10
+    memory: 4096
+    cpus: 2
+    groups:
+      - debian
+
+provisioner:
+  name: ansible
+  playbooks:
+    prepare: ../default/prepare.yml
+    converge: ../all-parameters/converge.yml
+    verify: ../all-parameters/verify.yml
+
+verifier:
+  name: ansible

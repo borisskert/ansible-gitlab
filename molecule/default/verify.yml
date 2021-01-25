@@ -1,0 +1,204 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Should create config file
+      slurp:
+        src: /srv/gitlab/config/gitlab.rb
+      register: gitlab_config_file
+      failed_when:
+        not gitlab_config_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          ## GitLab configuration settings
+          ##! This file is generated during initial installation and **is not** modified
+          ##! during upgrades.
+          ##! Check out the latest version of this file to know about the different
+          ##! settings that can be configured by this file, which may be found at:
+          ##! https://gitlab.com/gitlab-org/omnibus-gitlab/raw/master/files/gitlab-config-template/gitlab.rb.template
+
+
+          ## GitLab URL
+          external_url 'GENERATED_EXTERNAL_URL'
+
+          ################################################################################
+          ################################################################################
+          ##                Configuration Settings for GitLab CE and EE                 ##
+          ################################################################################
+          ################################################################################
+
+          ################################################################################
+
+          ### Email Settings
+
+
+
+
+
+          ### Backup Settings
+          gitlab_rails['manage_backup_path'] = true
+          gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
+
+          ### GitLab Shell settings for GitLab
+
+          ### GitLab email server settings
+
+
+
+
+
+
+          ################################################################################
+          ## GitLab Sidekiq
+          ################################################################################
+
+          ################################################################################
+          ## GitLab NGINX
+          ##! Docs: https://docs.gitlab.com/omnibus/settings/nginx.html
+          ################################################################################
+
+          nginx['listen_port'] = 80
+          nginx['listen_https'] = false
+
+          ################################################################################
+          ## GitLab Pages
+          ##! Docs: https://docs.gitlab.com/ce/pages/administration.html
+          ################################################################################
+
+
+          ################################################################################
+          ## GitLab Pages NGINX
+          ################################################################################
+
+          ################################################################################
+          ## Prometheus Node Exporter
+          ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/node_exporter.html
+          ################################################################################
+
+    - name: Should create systemd unit file
+      slurp:
+        src: /etc/systemd/system/gitlab.service
+      register: gitlab_service_file
+      failed_when:
+        not gitlab_service_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Install]
+          WantedBy=multi-user.target
+
+          [Unit]
+          Description=gitlab service
+          After=docker.service
+          Requires=docker.service
+
+          [Service]
+          ExecStartPre=-/usr/bin/docker rm -f gitlab.service
+
+          ExecStart=/usr/bin/docker run --name gitlab.service \
+                      --volume /srv/gitlab/config:/etc/gitlab \
+                      --volume /srv/gitlab/data:/var/opt/gitlab \
+                      --volume /srv/gitlab/log:/var/log/gitlab \
+                      --volume /srv/gitlab/backup:/var/opt/gitlab/backups \
+                      --publish 0.0.0.0:443:443 \
+                      --publish 0.0.0.0:80:80 \
+                      --publish 10022:22 \
+                      gitlab/gitlab-ce:latest
+
+          ExecStop=-/usr/bin/docker stop gitlab.service
+          ExecStopPost=-/usr/bin/docker rm -f gitlab.service
+
+          Restart=always
+          RestartSec=60s
+          TimeoutSec=3600
+
+    - name: Should create backup systemd unit file
+      slurp:
+        src: /etc/systemd/system/gitlab-backup.service
+      register: backup_service_file
+      failed_when:
+        not backup_service_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Unit]
+          Description=gitlab backup service
+          Requires=gitlab.service
+
+          [Service]
+          ExecStart = /usr/bin/docker exec --tty gitlab.service \
+                          gitlab-rake gitlab:backup:create
+          Restart = no
+          TimeoutSec = 3600
+
+    - name: Should create backup systemd timer file
+      slurp:
+        src: /etc/systemd/system/gitlab-backup.timer
+      register: backup_timer_file
+      failed_when:
+        not backup_timer_file.content == ( expected_content | b64encode )
+      vars:
+        expected_content: |
+          [Unit]
+          Description=Run daily a gitlab backup
+
+          [Timer]
+          OnCalendar = daily
+          Persistent=true
+
+          [Install]
+          WantedBy=timers.target
+
+    - name: should start backup timer
+      service:
+        name: gitlab-backup.timer
+        state: started
+      register: backup_timer
+      failed_when: backup_timer.changed
+
+    - name: Should create config volume
+      stat:
+        path: /srv/gitlab/config
+      register: config_volume_directory
+      failed_when: not config_volume_directory.stat.exists
+
+    - name: Should create data volume
+      stat:
+        path: /srv/gitlab/data
+      register: data_volume_directory
+      failed_when: not data_volume_directory.stat.exists
+
+    - name: Should create log volume
+      stat:
+        path: /srv/gitlab/log
+      register: log_volume_directory
+      failed_when: not log_volume_directory.stat.exists
+
+    - name: Should create backup volume
+      stat:
+        path: /srv/gitlab/backup
+      register: backup_volume_directory
+      failed_when: not backup_volume_directory.stat.exists
+
+    - name: Should open 80/tcp port
+      command: nc -z -w1 localhost 80
+      changed_when: false
+      register: netcat_80
+      retries: 300
+      delay: 1
+      until: netcat_80 is defined
+        and netcat_80.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )
+
+    - name: Should NOT open 8081/tcp port
+      command: nc -z -w1 localhost 8081
+      changed_when: false
+      register: netcat_8081
+      failed_when: netcat_8081.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )
