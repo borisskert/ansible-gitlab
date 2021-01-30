@@ -1,27 +1,8 @@
 ---
 - include: check-parameters.yml
-- include: create-volumes.yml
 
-- name: Setup gitlab config
-  template:
-    src: gitlab.rb.j2
-    dest: "{{ gitlab_config_volume }}/gitlab.rb"
-    owner: root
-    group: root
-    mode: 0600
-  notify: Restart gitlab service
+- include: install.yml
+  when: gitlab_state is not defined or gitlab_state == 'present'
 
-- include: setup-systemd-services.yml
-
-- name: Reload systemd and restart Gitlab if neccessary
-  meta: flush_handlers
-
-- name: Enable gitlab service (if not started)
-  service:
-    name: gitlab
-    enabled: true
-    state: started
-  when: not (
-    molecule_docker_environment is defined
-    and molecule_docker_environment | bool
-    )
+- include: uninstall.yml
+  when: gitlab_state is defined and gitlab_state == 'absent'

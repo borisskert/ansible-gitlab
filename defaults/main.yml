@@ -50,3 +50,5 @@ gitlab_pages_external_url: null
 
 gitlab_disable_prometheus: false
 gitlab_sidekiq_concurrency: 0
+
+gitlab_state: present

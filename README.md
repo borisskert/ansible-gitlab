@@ -65,6 +65,7 @@ Ansible role to install gitlab as docker service.
 | gitlab_pages_external_url        | url     | yes |          | Defines the URL used for Gitlab Pages |
 | gitlab_disable_prometheus        | boolean | no  |          | Disable prometheus exporter |
 | gitlab_sidekiq_concurrency       | number  | no  |          | Setup the number of sidekiq concurrency processes |
+| gitlab_state                     | text    | no  | `present` | Defines whether gitlab will be installed (`present`) or uninstalled (`absent`) |
 
 ## Usage
 
@@ -78,7 +79,7 @@ Ansible role to install gitlab as docker service.
 
 ### Playbook
 
-minimal:
+#### Minimal Playbook
 
 ```yaml
 - hosts: test_machine
@@ -87,6 +88,8 @@ minimal:
   roles:
   - role: install-gitlab
 ```
+
+#### Playbook with all parameters
 
 ```yaml
 - hosts: test_machine
@@ -124,7 +127,21 @@ minimal:
       gitlab_backup_keep_time: 604800
       gitlab_disable_prometheus: true
       gitlab_sidekiq_concurrency: 4
+      gitlab_state: present
 ```
+
+#### Uninstall gitlab
+
+```yaml
+- hosts: test_machine
+  become: yes
+
+  roles:
+  - role: install-gitlab
+    gitlab_state: absent
+```
+
+Your volumes will not be deleted.
 
 ## Testing
 
@@ -144,6 +161,7 @@ Requirements:
 ```shell script
 molecule test
 molecule test --scenario-name all-parameters
+molecule test --scenario-name state-absent
 ```
 
 ### Run within Vagrant
@@ -151,6 +169,7 @@ molecule test --scenario-name all-parameters
 ```shell script
 molecule test --scenario-name vagrant
 molecule test --scenario-name vagrant-all-parameters
+molecule test --scenario-name vagrant-state-absent
 ```
 
 I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.

@@ -1,0 +1,23 @@
+---
+- name: Remove gitlab config
+  file:
+    path: "{{ gitlab_config_volume }}/gitlab.rb"
+    state: absent
+
+- name: Remove gitlab config
+  file:
+    path: /etc/systemd/system/gitlab.service
+    state: absent
+  notify: Reload systemd due to gitlab uninstall
+
+- name: Remove gitlab backup service
+  file:
+    path: "/etc/systemd/system/{{ gitlab_backup_service_name }}.service"
+    state: absent
+  notify: Reload systemd due to gitlab uninstall
+
+- name: Remove gitlab backup timer
+  file:
+    path: "/etc/systemd/system/{{ gitlab_backup_service_name }}.timer"
+    state: absent
+  notify: Reload systemd due to gitlab uninstall

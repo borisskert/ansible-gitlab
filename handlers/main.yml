@@ -41,3 +41,11 @@
     molecule_docker_environment is defined
     and molecule_docker_environment | bool
     )
+
+- name: Reload systemd due to gitlab uninstall
+  service:
+    daemon_reload: true
+  when: not (
+    molecule_docker_environment is defined
+    and molecule_docker_environment | bool
+    )

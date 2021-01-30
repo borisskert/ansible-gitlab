@@ -1,0 +1,80 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Should remove config file
+      stat:
+        path: /srv/gitlab/config/gitlab.rb
+      register: gitlab_config_file
+      failed_when: gitlab_config_file.stat.exists
+
+    - name: Should remove systemd unit file
+      stat:
+        path: /etc/systemd/system/gitlab.service
+      register: gitlab_service_file
+      failed_when: gitlab_service_file.stat.exists
+
+    - name: Should remove backup systemd unit file
+      stat:
+        path: /etc/systemd/system/gitlab-backup.service
+      register: backup_service_file
+      failed_when: backup_service_file.stat.exists
+
+    - name: Should remove backup systemd timer file
+      stat:
+        path: /etc/systemd/system/gitlab-backup.timer
+      register: backup_timer_file
+      failed_when: backup_timer_file.stat.exists
+
+    - name: should start backup timer
+      service:
+        name: gitlab-backup.timer
+        state: started
+      register: backup_timer
+      failed_when: backup_timer.changed
+
+    - name: Should create config volume
+      stat:
+        path: /srv/gitlab/config
+      register: config_volume_directory
+      failed_when: not config_volume_directory.stat.exists
+
+    - name: Should create data volume
+      stat:
+        path: /srv/gitlab/data
+      register: data_volume_directory
+      failed_when: not data_volume_directory.stat.exists
+
+    - name: Should NOT remove log volume
+      stat:
+        path: /srv/gitlab/log
+      register: log_volume_directory
+      failed_when: not log_volume_directory.stat.exists
+
+    - name: Should NOT remove backup volume
+      stat:
+        path: /srv/gitlab/backup
+      register: backup_volume_directory
+      failed_when: not backup_volume_directory.stat.exists
+
+    - name: Should NOT open 80/tcp port
+      command: nc -z -w1 localhost 80
+      changed_when: false
+      register: netcat_80
+      failed_when: netcat_80.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )
+
+    - name: Should NOT open 8081/tcp port
+      command: nc -z -w1 localhost 8081
+      changed_when: false
+      register: netcat_8081
+      failed_when: netcat_8081.rc == 0
+      when: not (
+        molecule_docker_environment is defined
+        and molecule_docker_environment | bool
+        )

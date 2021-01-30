@@ -1,0 +1,43 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: ./molecule/default/requirements.yml
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+
+driver:
+  name: docker
+
+platforms:
+  - name: ansible-gitlab-focal
+    image: docker.io/borisskert/python3:focal
+    pre_build_image: true
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    groups:
+      - docker
+
+  - name: ansible-gitlab-buster
+    image: docker.io/borisskert/python3:buster
+    pre_build_image: true
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    groups:
+      - docker
+      - debian
+
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      docker:
+        molecule_docker_environment: true
+      debian:
+        ansible_python_interpreter: /usr/bin/python3
+
+verifier:
+  name: ansible
