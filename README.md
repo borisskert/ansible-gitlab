@@ -32,20 +32,20 @@ Ansible role to install gitlab as docker service.
 
 | Variable      | Type | Mandatory? | Default | Description           |
 |---------------|------|------------|---------|-----------------------|
-| gitlab_image_name    | text | no         | gitlab/gitlab-ce | Docker image name    |
-| gitlab_image_version | text | no         | 12.9.2-ce.0      | Docker image version |
-| gitlab_interface     | ip address | no   | 0.0.0.0          | Mapped network for web-interface ports |
-| gitlab_https_port    | port       | no   | 443              | Mapped HTTPS port        |
-| gitlab_http_port     | port       | no   | 80               | Mapped HTTP port         |
-| gitlab_ssh_port      | port       | no   | 10022            | Mapped SSH port          |
-| gitlab_config_volume | path       | yes  | <empty>          | Path to config volume    |
-| gitlab_data_volume   | path       | yes  | <empty>          | Path to data volume      |
-| gitlab_log_volume    | path       | yes  | <empty>          | Path to log volume       |
-| gitlab_backup_volume | path       | yes  | <empty>          | Path to backup volume    |
-| gitlab_external_url  | url        | no   | <empty>          | Gitlab Url, like git.example.org |
-| gitlab_ssh_host      | host       | no   | <empty>          | SSH Host, like ssh.example.org   |
-| gitlab_shell_ssh_port | host      | no   | <empty>          | Gitlab shell SSH port, like 10022 |
-| gitlab_email_enabled  | boolean   | no   | false            | Is mailing enabled?               |
+| gitlab_image_name    | text | no       | gitlab/gitlab-ce | Docker image name    |
+| gitlab_image_version | text | no       | 12.9.2-ce.0      | Docker image version |
+| gitlab_interface     | ip address | no | 0.0.0.0          | Mapped network for web-interface ports |
+| gitlab_https_port    | port       | no | 443              | Mapped HTTPS port        |
+| gitlab_http_port     | port       | no | 80               | Mapped HTTP port         |
+| gitlab_ssh_port      | port       | no | 10022            | Mapped SSH port          |
+| gitlab_config_volume | path       | no | /srv/gitlab/config | Path to config volume    |
+| gitlab_data_volume   | path       | no | /srv/gitlab/data   | Path to data volume      |
+| gitlab_log_volume    | path       | no | /srv/gitlab/log    | Path to log volume       |
+| gitlab_backup_volume | path       | no | /srv/gitlab/backup | Path to backup volume    |
+| gitlab_external_url  | url        | no | <empty>            | Gitlab Url, like git.example.org |
+| gitlab_ssh_host      | host       | no | <empty>            | SSH Host, like ssh.example.org   |
+| gitlab_shell_ssh_port | host      | no | <empty>            | Gitlab shell SSH port, like 10022 |
+| gitlab_email_enabled  | boolean   | no | false              | Is mailing enabled?               |
 | gitlab_email_from     | email address | no | <empty>        | Email from address                |
 | gitlab_email_display_name | text      | no | <empty>        | Email from name                   |
 | gitlab_email_reply_to     | email address | no | <empty>    | Reply email address               |
@@ -58,7 +58,7 @@ Ansible role to install gitlab as docker service.
 | gitlab_smtp_enable_starttls_auto | boolean | no | <empty>   | Is start-tls-auto enabled?             |
 | gitlab_smtp_tls                  | boolean | no | <empty>   | Use TLS?                               |
 | gitlab_backup_keep_time          | number  | no | <empty>   | The duration in seconds to keep backups before they are allowed to be deleted |
-| gitlab_nginx_disable_hsts              | boolean | no | no        | If you are running your GitLab instance behind a reverse proxy you probably don't want to configure HSTS in GitLab |
+| gitlab_nginx_disable_hsts        | boolean | no | no        | If you are running your GitLab instance behind a reverse proxy you probably don't want to configure HSTS in GitLab |
 | gitlab_pages_enabled             | boolean | no | no        | Enables/Disables the Gitlab Pages feature |
 | gitlab_pages_port                | number  | no | 8081      | Defines the (internal) port used for Gitlab Pages |
 | gitlab_pages_external_port       | number  | yes |          | Defines the mapped port used for Gitlab Pages |
@@ -86,10 +86,6 @@ minimal:
 
   roles:
   - role: install-gitlab
-    gitlab_config_volume: /srv/gitlab/config
-    gitlab_data_volume: /srv/gitlab/data
-    gitlab_log_volume: /srv/gitlab/log
-    gitlab_backup_volume: /srv/gitlab/backups
 ```
 
 ```yaml
@@ -136,6 +132,7 @@ Requirements:
 
 * [Vagrant](https://www.vagrantup.com/)
 * [VirtualBox](https://www.virtualbox.org/)
+* [libvirt](https://libvirt.org/)
 * [Ansible](https://docs.ansible.com/)
 * [Molecule](https://molecule.readthedocs.io/en/latest/index.html)
 * [yamllint](https://yamllint.readthedocs.io/en/stable/#)
@@ -146,16 +143,14 @@ Requirements:
 
 ```shell script
 molecule test
+molecule test --scenario-name all-parameters
 ```
 
 ### Run within Vagrant
 
 ```shell script
-molecule test --scenario-name vagrant-xenial
-molecule test --scenario-name vagrant-bionic
-molecule test --scenario-name vagrant-focal
-molecule test --scenario-name vagrant-stretch
-molecule test --scenario-name vagrant-buster
+molecule test --scenario-name vagrant
+molecule test --scenario-name vagrant-all-parameters
 ```
 
 I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.

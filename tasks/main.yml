@@ -13,12 +13,6 @@
 
 - include: setup-systemd-services.yml
 
-- name: pull image (to avoid long down-times)
-  docker_image:
-    name: "{{ gitlab_image_name }}:{{ gitlab_image_version }}"
-    source: pull
-  notify: Restart gitlab service
-
 - name: Reload systemd and restart Gitlab if neccessary
   meta: flush_handlers
 
