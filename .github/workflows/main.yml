@@ -19,16 +19,16 @@ jobs:
           path: "${{ github.repository }}"
 
       - name: Run 'default' tests
-        uses: borisskert/molecule-action@v21.01.30
+        uses: borisskert/molecule-action@v24.12.9
         with:
           arguments: test
 
       - name: Run 'all-parameters' tests
-        uses: borisskert/molecule-action@v21.01.30
+        uses: borisskert/molecule-action@v24.12.9
         with:
           arguments: test --scenario-name all-parameters
 
       - name: Run 'state-absent' tests
-        uses: borisskert/molecule-action@v21.01.30
+        uses: borisskert/molecule-action@v24.12.9
         with:
           arguments: test --scenario-name state-absent

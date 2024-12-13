@@ -3,6 +3,7 @@ dependency:
   name: galaxy
   options:
     role-file: ./molecule/default/requirements.yml
+    force: true
 
 driver:
   name: vagrant
@@ -10,14 +11,28 @@ driver:
     name: libvirt
 
 platforms:
+  - name: ansible-gitlab-noble
+    box: cloud-image/ubuntu-24.04
+    memory: 4096
+    cpus: 4
+  - name: ansible-gitlab-jammy
+    box: cloud-image/ubuntu-22.04
+    memory: 4096
+    cpus: 4
   - name: ansible-gitlab-focal
-    box: generic/ubuntu2004
+    box: cloud-image/ubuntu-20.04
     memory: 4096
-    cpus: 2
-  - name: ansible-gitlab-buster
-    box: generic/debian10
+    cpus: 4
+  - name: ansible-gitlab-bookworm
+    box: cloud-image/debian-12
     memory: 4096
-    cpus: 2
+    cpus: 4
+    groups:
+      - debian
+  - name: ansible-gitlab-bullseye
+    box: cloud-image/debian-11
+    memory: 4096
+    cpus: 4
     groups:
       - debian
 
