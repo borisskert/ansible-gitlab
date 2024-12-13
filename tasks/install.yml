@@ -1,5 +1,5 @@
 ---
-- include: create-volumes.yml
+- include_tasks: create-volumes.yml
 
 - name: Setup gitlab config
   template:
@@ -10,7 +10,7 @@
     mode: 0600
   notify: Restart gitlab service
 
-- include: setup-systemd-services.yml
+- include_tasks: setup-systemd-services.yml
 
 - name: Reload systemd and restart Gitlab if neccessary
   meta: flush_handlers

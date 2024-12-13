@@ -1,8 +1,8 @@
 ---
-- include: check-parameters.yml
+- include_tasks: check-parameters.yml
 
-- include: install.yml
+- include_tasks: install.yml
   when: gitlab_state is not defined or gitlab_state == 'present'
 
-- include: uninstall.yml
+- include_tasks: uninstall.yml
   when: gitlab_state is defined and gitlab_state == 'absent'
